@@ -5,6 +5,7 @@ import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
 import ModeSelector from "./components/ModeSelector.vue";
 import TimerSettings from "./components/TimerSettings.vue";
+import IconTest from "./components/IconTest.vue";
 
 const timerStore = useTimerStore();
 const timerInterval = ref<NodeJS.Timeout | null>(null);
@@ -44,6 +45,9 @@ onUnmounted(() => {
     <!-- 番茄时钟测试界面 -->
     <div class="timer-test">
       <h2>番茄时钟测试 (Pinia 状态管理)</h2>
+      
+      <!-- Lucide 图标测试 -->
+      <IconTest />
       
       <TimerDisplay />
       <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
