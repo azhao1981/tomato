@@ -17,6 +17,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      localforage:
+        specifier: ^1.10.0
+        version: 1.10.0
       lucide-vue-next:
         specifier: ^0.539.0
         version: 0.539.0(vue@3.5.18(typescript@5.6.3))
@@ -540,9 +543,18 @@ packages:
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==, tarball: https://registry.npmmirror.com/hookable/-/hookable-5.5.3.tgz}
 
+  immediate@3.0.6:
+    resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==, tarball: https://registry.npmmirror.com/immediate/-/immediate-3.0.6.tgz}
+
   is-what@4.1.16:
     resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==, tarball: https://registry.npmmirror.com/is-what/-/is-what-4.1.16.tgz}
     engines: {node: '>=12.13'}
+
+  lie@3.1.1:
+    resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==, tarball: https://registry.npmmirror.com/lie/-/lie-3.1.1.tgz}
+
+  localforage@1.10.0:
+    resolution: {integrity: sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==, tarball: https://registry.npmmirror.com/localforage/-/localforage-1.10.0.tgz}
 
   lucide-vue-next@0.539.0:
     resolution: {integrity: sha512-8Y75ekxsBqW+9YZPCbxE6KXoCbNmJYUujKP+nK2cIqmONJXvUSeyroEW4DV1Kjlw8ZvmfKwP0FpdjPzuKvRsQw==, tarball: https://registry.npmmirror.com/lucide-vue-next/-/lucide-vue-next-0.539.0.tgz}
@@ -1060,7 +1072,17 @@ snapshots:
 
   hookable@5.5.3: {}
 
+  immediate@3.0.6: {}
+
   is-what@4.1.16: {}
+
+  lie@3.1.1:
+    dependencies:
+      immediate: 3.0.6
+
+  localforage@1.10.0:
+    dependencies:
+      lie: 3.1.1
 
   lucide-vue-next@0.539.0(vue@3.5.18(typescript@5.6.3)):
     dependencies:

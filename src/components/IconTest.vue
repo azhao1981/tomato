@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Lucide 图标测试组件
+import { Play, Pause, RotateCcw, Clock, Coffee } from "lucide-vue-next";
 </script>
 
 <template>

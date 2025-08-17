@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from "vue";
+import { ref, onUnmounted, onMounted } from "vue";
 import { useTimerStore } from "./stores/timerStore";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
@@ -7,9 +7,15 @@ import ModeSelector from "./components/ModeSelector.vue";
 import TimerSettings from "./components/TimerSettings.vue";
 import IconTest from "./components/IconTest.vue";
 import TimeUtilsTest from "./components/TimeUtilsTest.vue";
+import StorageTest from "./components/StorageTest.vue";
 
 const timerStore = useTimerStore();
-const timerInterval = ref<NodeJS.Timeout | null>(null);
+const timerInterval = ref<number | null>(null);
+
+// 组件挂载时加载设置
+onMounted(async () => {
+  await timerStore.loadSettings();
+});
 
 function startTimer() {
   if (!timerStore.isRunning) {
@@ -52,6 +58,9 @@ onUnmounted(() => {
       
       <!-- dayjs 时间处理工具测试 -->
       <TimeUtilsTest />
+      
+      <!-- localforage 本地存储测试 -->
+      <StorageTest />
       
       <TimerDisplay />
       <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />

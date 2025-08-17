@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { storage } from '../services/storageService'
 
 interface TimerSettings {
   pomodoroTime: number
@@ -31,11 +32,40 @@ export const useTimerStore = defineStore('timer', {
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     },
     progressPercentage: (state) => {
-      const totalTime = state.settings[state.mode + 'Time'] * 60
+      const totalTime = state.settings[state.mode === 'pomodoro' ? 'pomodoroTime' : state.mode === 'shortBreak' ? 'shortBreakTime' : 'longBreakTime'] * 60
       return ((totalTime - state.currentTime) / totalTime) * 100
     }
   },
   actions: {
+    async loadSettings() {
+      try {
+        const settings = await storage.getSettings()
+        // 确保数据类型正确
+        this.settings = {
+          pomodoroTime: Number(settings.pomodoroTime) || 25,
+          shortBreakTime: Number(settings.shortBreakTime) || 5,
+          longBreakTime: Number(settings.longBreakTime) || 15
+        }
+        this.resetTimer()
+      } catch (error) {
+        console.error('加载设置失败:', error)
+        // 使用默认设置
+        this.settings = {
+          pomodoroTime: 25,
+          shortBreakTime: 5,
+          longBreakTime: 15
+        }
+      }
+    },
+    
+    async saveSettings() {
+      try {
+        await storage.saveSettings(this.settings)
+      } catch (error) {
+        console.error('保存设置失败:', error)
+      }
+    },
+    
     startTimer() {
       this.isRunning = true
     },
@@ -44,14 +74,15 @@ export const useTimerStore = defineStore('timer', {
     },
     resetTimer() {
       this.isRunning = false
-      this.currentTime = this.settings[this.mode + 'Time'] * 60
+      this.currentTime = this.settings[this.mode === 'pomodoro' ? 'pomodoroTime' : this.mode === 'shortBreak' ? 'shortBreakTime' : 'longBreakTime'] * 60
     },
     setMode(mode: 'pomodoro' | 'shortBreak' | 'longBreak') {
       this.mode = mode
       this.resetTimer()
     },
-    updateSettings(newSettings: Partial<TimerSettings>) {
+    async updateSettings(newSettings: Partial<TimerSettings>) {
       this.settings = { ...this.settings, ...newSettings }
+      await this.saveSettings()
       this.resetTimer()
     },
     decrementTime() {
