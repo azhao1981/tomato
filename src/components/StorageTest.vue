@@ -32,11 +32,16 @@
       </div>
       <div class="task-list">
         <div v-for="task in tasks" :key="task.id" class="task-item">
-          <span :class="{ completed: task.completed }">{{ task.title }}</span>
-          <button @click="toggleTask(task)" size="small">
-            {{ task.completed ? '撤销' : '完成' }}
-          </button>
-          <button @click="deleteTask(task)" size="small">删除</button>
+          <div class="task-content">
+            <span :class="{ completed: task.completed }">{{ task.title }}</span>
+            <span class="task-time">{{ formatDateTime(task.createdAt) }}</span>
+          </div>
+          <div class="task-actions">
+            <button @click="toggleTask(task)" size="small">
+              {{ task.completed ? '撤销' : '完成' }}
+            </button>
+            <button @click="deleteTask(task)" size="small">删除</button>
+          </div>
         </div>
       </div>
       <div class="task-actions">
@@ -61,6 +66,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { storage } from '../services/storageService'
 import { Settings } from 'lucide-vue-next'
+import { formatDateTime } from '../utils/timeUtils'
 
 const testSettings = reactive({
   pomodoroTime: 25,
@@ -296,6 +302,19 @@ button[size="small"] {
 
 .task-item:last-child {
   border-bottom: none;
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.task-time {
+  font-size: 12px;
+  color: #6c757d;
+  font-family: monospace;
 }
 
 .task-item .completed {
