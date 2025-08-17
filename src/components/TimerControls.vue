@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
+import { Play, Pause, RotateCcw } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
 
@@ -24,14 +25,17 @@ function resetTimer() {
 
 <template>
   <div class="controls">
-    <button @click="startTimer" :disabled="timerStore.isRunning">
-      开始
+    <button @click="startTimer" :disabled="timerStore.isRunning" class="start-btn">
+      <Play :size="20" />
+      <span>开始</span>
     </button>
-    <button @click="pauseTimer" :disabled="!timerStore.isRunning">
-      暂停
+    <button @click="pauseTimer" :disabled="!timerStore.isRunning" class="pause-btn">
+      <Pause :size="20" />
+      <span>暂停</span>
     </button>
-    <button @click="resetTimer">
-      重置
+    <button @click="resetTimer" class="reset-btn">
+      <RotateCcw :size="20" />
+      <span>重置</span>
     </button>
   </div>
 </template>
@@ -51,6 +55,10 @@ function resetTimer() {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .controls button:not(:disabled):hover {
@@ -63,18 +71,18 @@ function resetTimer() {
   cursor: not-allowed;
 }
 
-.controls button:first-child {
-  background: #27ae60;
+.controls .start-btn {
+  background: #22c55e;
   color: white;
 }
 
-.controls button:nth-child(2) {
-  background: #f39c12;
+.controls .pause-btn {
+  background: #f59e0b;
   color: white;
 }
 
-.controls button:nth-child(3) {
-  background: #e74c3c;
+.controls .reset-btn {
+  background: #ef4444;
   color: white;
 }
 </style>

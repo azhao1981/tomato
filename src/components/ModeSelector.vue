@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
+import { Clock, Coffee, Moon } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
 </script>
@@ -9,20 +10,26 @@ const timerStore = useTimerStore()
     <button 
       @click="timerStore.setMode('pomodoro')" 
       :class="{ active: timerStore.mode === 'pomodoro' }"
+      class="pomodoro-btn"
     >
-      番茄时间
+      <Clock :size="16" />
+      <span>番茄时间</span>
     </button>
     <button 
       @click="timerStore.setMode('shortBreak')" 
       :class="{ active: timerStore.mode === 'shortBreak' }"
+      class="short-break-btn"
     >
-      短休息
+      <Coffee :size="16" />
+      <span>短休息</span>
     </button>
     <button 
       @click="timerStore.setMode('longBreak')" 
       :class="{ active: timerStore.mode === 'longBreak' }"
+      class="long-break-btn"
     >
-      长休息
+      <Moon :size="16" />
+      <span>长休息</span>
     </button>
   </div>
 </template>
@@ -42,15 +49,43 @@ const timerStore = useTimerStore()
   background: white;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .mode-selector button:hover {
   border-color: #3498db;
 }
 
-.mode-selector button.active {
-  background: #3498db;
+.mode-selector .pomodoro-btn.active {
+  background: #ef4444;
   color: white;
-  border-color: #3498db;
+  border-color: #ef4444;
+}
+
+.mode-selector .short-break-btn.active {
+  background: #8b5cf6;
+  color: white;
+  border-color: #8b5cf6;
+}
+
+.mode-selector .long-break-btn.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+
+.mode-selector .pomodoro-btn:hover {
+  border-color: #ef4444;
+}
+
+.mode-selector .short-break-btn:hover {
+  border-color: #8b5cf6;
+}
+
+.mode-selector .long-break-btn:hover {
+  border-color: #6366f1;
 }
 </style>
