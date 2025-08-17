@@ -10,7 +10,13 @@
       "Bash(mv:*)",
       "Bash(pnpm add:*)",
       "Bash(pnpm run build:*)",
-      "Bash(pnpm type-check:*)"
+      "Bash(pnpm type-check:*)",
+      "Bash(pnpm list:*)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(node:*)",
+      "Bash(pnpm exec node:*)",
+      "Bash(rm:*)",
+      "Bash(vue-tsc:*)"
     ],
     "deny": [],
     "ask": []

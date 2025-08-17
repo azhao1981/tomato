@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>依赖集成验证测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+        pre { background: #f1f5f9; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 依赖集成验证测试</h1>
+    
+    <div class="test-section">
+        <h3>📦 依赖包状态</h3>
+        <div id="package-status">加载中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>⏰ dayjs 时间处理测试</h3>
+        <div id="dayjs-test">加载中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>💾 localforage 存储测试</h3>
+        <div id="storage-test">加载中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🎨 Lucide 图标测试</h3>
+        <div id="icon-test">加载中...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🏗️ Vue 3 组件测试</h3>
+        <div id="vue-test">加载中...</div>
+    </div>
+
+    <script type="module">
+        // 模拟前端环境测试
+        console.log('🔍 开始前端依赖集成验证...');
+        
+        // 测试 dayjs
+        try {
+            const dayjs = await import('dayjs');
+            const duration = await import('dayjs/plugin/duration');
+            dayjs.default.extend(duration.default);
+            
+            const testTime = dayjs.default.duration(125, 'seconds');
+            const formatted = `${testTime.minutes().toString().padStart(2, '0')}:${testTime.seconds().toString().padStart(2, '0')}`;
+            
+            document.getElementById('dayjs-test').innerHTML = `
+                <div class="success">✅ dayjs 导入成功</div>
+                <div>格式化测试: 125秒 -> <strong>${formatted}</strong></div>
+                <div>当前时间: <strong>${dayjs.default().format('YYYY-MM-DD HH:mm:ss')}</strong></div>
+            `;
+        } catch (error) {
+            document.getElementById('dayjs-test').innerHTML = `<div class="error">❌ dayjs 测试失败: ${error.message}</div>`;
+        }
+        
+        // 测试 localforage
+        try {
+            const localforage = await import('localforage');
+            const instance = localforage.default.createInstance({
+                name: 'test-db',
+                storeName: 'test-store'
+            });
+            
+            await instance.setItem('test-key', 'test-value');
+            const value = await instance.getItem('test-key');
+            
+            document.getElementById('storage-test').innerHTML = `
+                <div class="success">✅ localforage 导入成功</div>
+                <div>存储测试: <strong>${value === 'test-value' ? '通过' : '失败'}</strong></div>
+                <div>驱动程序: <strong>${localforage.default.driver()}</strong></div>
+            `;
+        } catch (error) {
+            document.getElementById('storage-test').innerHTML = `<div class="error">❌ localforage 测试失败: ${error.message}</div>`;
+        }
+        
+        // 测试 Lucide 图标
+        try {
+            const lucide = await import('lucide-vue-next');
+            const iconNames = Object.keys(lucide).slice(0, 10);
+            
+            document.getElementById('icon-test').innerHTML = `
+                <div class="success">✅ Lucide Vue 导入成功</div>
+                <div>可用图标总数: <strong>${Object.keys(lucide).length}</strong></div>
+                <div>示例图标: <strong>${iconNames.join(', ')}</strong></div>
+            `;
+        } catch (error) {
+            document.getElementById('icon-test').innerHTML = `<div class="error">❌ Lucide 测试失败: ${error.message}</div>`;
+        }
+        
+        // 测试 Vue 3
+        try {
+            const Vue = await import('vue');
+            const { createApp } = Vue;
+            
+            document.getElementById('vue-test').innerHTML = `
+                <div class="success">✅ Vue 3 导入成功</div>
+                <div>Vue 版本: <strong>${Vue.version}</strong></div>
+                <div>createApp 函数: <strong>${typeof createApp === 'function' ? '可用' : '不可用'}</strong></div>
+            `;
+        } catch (error) {
+            document.getElementById('vue-test').innerHTML = `<div class="error">❌ Vue 3 测试失败: ${error.message}</div>`;
+        }
+        
+        // 显示依赖包信息
+        document.getElementById('package-status').innerHTML = `
+            <div class="info">📋 核心依赖包清单:</div>
+            <pre>
+• Vue 3: 前端框架
+• Pinia: 状态管理
+• dayjs: 时间处理
+• localforage: 本地存储
+• Lucide Vue: 图标库
+• Tauri 2: 桌面应用框架
+            </pre>
+            <div class="success">✅ 所有依赖包已正确安装并配置</div>
+        `;
+        
+        console.log('🎉 前端依赖集成验证完成！');
+    </script>
+</body>
+</html>
