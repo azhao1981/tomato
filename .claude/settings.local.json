@@ -6,7 +6,8 @@
       "Bash(cmd:*)",
       "Bash(mkdir:*)",
       "Bash(pnpm build:*)",
-      "Bash(mcp list:*)"
+      "Bash(mcp list:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []

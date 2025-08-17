@@ -1,7 +1,20 @@
 import { defineStore } from 'pinia'
 
+interface TimerSettings {
+  pomodoroTime: number
+  shortBreakTime: number
+  longBreakTime: number
+}
+
+interface TimerState {
+  currentTime: number
+  isRunning: boolean
+  mode: 'pomodoro' | 'shortBreak' | 'longBreak'
+  settings: TimerSettings
+}
+
 export const useTimerStore = defineStore('timer', {
-  state: () => ({
+  state: (): TimerState => ({
     currentTime: 25 * 60, // 25分钟，以秒为单位
     isRunning: false,
     mode: 'pomodoro', // pomodoro, shortBreak, longBreak
@@ -33,11 +46,11 @@ export const useTimerStore = defineStore('timer', {
       this.isRunning = false
       this.currentTime = this.settings[this.mode + 'Time'] * 60
     },
-    setMode(mode) {
+    setMode(mode: 'pomodoro' | 'shortBreak' | 'longBreak') {
       this.mode = mode
       this.resetTimer()
     },
-    updateSettings(newSettings) {
+    updateSettings(newSettings: Partial<TimerSettings>) {
       this.settings = { ...this.settings, ...newSettings }
       this.resetTimer()
     },
