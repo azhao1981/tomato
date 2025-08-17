@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wmic:*)",
+      "Bash(powershell:*)",
+      "Bash(cmd:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
