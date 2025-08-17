@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
+import { Clock, Coffee, Moon, Settings } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
 
@@ -18,9 +19,9 @@ function updateLongBreakTime() {
 
 <template>
   <div class="settings">
-    <h3>设置</h3>
+    <h3><Settings :size="20" /> 设置</h3>
     <div class="setting-item">
-      <label>番茄时间 (分钟):</label>
+      <label><Clock :size="16" /> 番茄时间 (分钟):</label>
       <input 
         type="number" 
         v-model.number="timerStore.settings.pomodoroTime" 
@@ -30,7 +31,7 @@ function updateLongBreakTime() {
       >
     </div>
     <div class="setting-item">
-      <label>短休息时间 (分钟):</label>
+      <label><Coffee :size="16" /> 短休息时间 (分钟):</label>
       <input 
         type="number" 
         v-model.number="timerStore.settings.shortBreakTime" 
@@ -40,7 +41,7 @@ function updateLongBreakTime() {
       >
     </div>
     <div class="setting-item">
-      <label>长休息时间 (分钟):</label>
+      <label><Moon :size="16" /> 长休息时间 (分钟):</label>
       <input 
         type="number" 
         v-model.number="timerStore.settings.longBreakTime" 

@@ -8,6 +8,7 @@ import {
   formatDate,
   getDurationBetween 
 } from "../utils/timeUtils";
+import { Timer } from 'lucide-vue-next'
 
 // 测试数据
 const testSeconds = ref(125); // 2分5秒
@@ -30,7 +31,7 @@ setInterval(() => {
 
 <template>
   <div class="time-utils-test">
-    <h3>dayjs 时间处理工具测试</h3>
+    <h3><Timer :size="20" /> dayjs 时间处理工具测试</h3>
     
     <div class="test-item">
       <span class="label">格式化时间 (125秒):</span>

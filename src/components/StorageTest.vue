@@ -1,6 +1,6 @@
 <template>
   <div class="storage-test">
-    <h3>Localforage 本地存储测试</h3>
+    <h3><Settings :size="20" /> Localforage 本地存储测试</h3>
     
     <div class="test-section">
       <h4>设置测试</h4>
@@ -60,6 +60,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { storage } from '../services/storageService'
+import { Settings } from 'lucide-vue-next'
 
 const testSettings = reactive({
   pomodoroTime: 25,
