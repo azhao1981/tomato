@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { storage } from '../services/storageService'
+import { formatTime } from '../utils/timeUtils'
 
 interface TimerSettings {
   pomodoroTime: number
@@ -27,9 +28,7 @@ export const useTimerStore = defineStore('timer', {
   }),
   getters: {
     formattedTime: (state) => {
-      const minutes = Math.floor(state.currentTime / 60)
-      const seconds = state.currentTime % 60
-      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      return formatTime(state.currentTime)
     },
     progressPercentage: (state) => {
       const totalTime = state.settings[state.mode === 'pomodoro' ? 'pomodoroTime' : state.mode === 'shortBreak' ? 'shortBreakTime' : 'longBreakTime'] * 60
