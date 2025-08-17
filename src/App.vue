@@ -6,6 +6,7 @@ import TimerControls from "./components/TimerControls.vue";
 import ModeSelector from "./components/ModeSelector.vue";
 import TimerSettings from "./components/TimerSettings.vue";
 import IconTest from "./components/IconTest.vue";
+import TimeUtilsTest from "./components/TimeUtilsTest.vue";
 
 const timerStore = useTimerStore();
 const timerInterval = ref<NodeJS.Timeout | null>(null);
@@ -48,6 +49,9 @@ onUnmounted(() => {
       
       <!-- Lucide 图标测试 -->
       <IconTest />
+      
+      <!-- dayjs 时间处理工具测试 -->
+      <TimeUtilsTest />
       
       <TimerDisplay />
       <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
