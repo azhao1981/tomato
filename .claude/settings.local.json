@@ -3,7 +3,9 @@
     "allow": [
       "Bash(wmic:*)",
       "Bash(powershell:*)",
-      "Bash(cmd:*)"
+      "Bash(cmd:*)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm build:*)"
     ],
     "deny": [],
     "ask": []

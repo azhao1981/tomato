@@ -66,6 +66,10 @@
             border-color: #667eea;
         }
         
+        .mode-button.active * {
+            color: white !important;
+        }
+        
         .control-button {
             transition: all 0.2s ease;
         }
@@ -93,15 +97,26 @@
                 <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
                     <i data-lucide="menu" class="w-5 h-5 text-white"></i>
                 </div>
-                <h1 class="text-lg font-medium text-gray-800">完成项目文档</h1>
+                <h1 class="text-lg font-medium text-gray-800" id="current-task">完成项目文档</h1>
             </div>
-            <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                <i data-lucide="settings" class="w-5 h-5 text-gray-600"></i>
+            <div class="flex items-center space-x-2">
+                <button class="nav-icon w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors" data-section="timer" title="番茄时钟">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-600"></i>
+                </button>
+                <button class="nav-icon w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors" data-section="settings" title="设置">
+                    <i data-lucide="settings" class="w-5 h-5 text-gray-600"></i>
+                </button>
+                <button class="nav-icon w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors" data-section="stats" title="统计">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-gray-600"></i>
+                </button>
+                <button class="nav-icon w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors" data-section="tasks" title="任务列表">
+                    <i data-lucide="list-checks" class="w-5 h-5 text-gray-600"></i>
+                </button>
             </div>
         </div>
 
         <!-- Main Timer Circle -->
-        <div class="flex justify-center mb-8">
+        <div class="flex justify-center mb-8" id="timer-section">
             <div class="timer-circle">
                 <div class="progress-ring"></div>
                 <div class="timer-display">
@@ -123,7 +138,7 @@
 
         
         <!-- Mode Selection -->
-        <div class="grid grid-cols-4 gap-3 mb-8">
+        <div class="grid grid-cols-4 gap-3 mb-8" id="settings-section">
             <button class="mode-button active bg-white rounded-xl p-4 text-center shadow-md">
                 <i data-lucide="clock" class="w-5 h-5 mx-auto mb-1 text-purple-600"></i>
                 <div class="text-xs text-green-600 font-medium">25min</div>
@@ -136,24 +151,43 @@
                 <div class="font-semibold text-sm">长休</div>
                 <div class="text-xs text-gray-500">15min</div>
             </button>
-            <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+            <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md" id="settings-dropdown-btn">
                 <div class="font-semibold text-sm">设置</div>
                 <i data-lucide="settings" class="w-3 h-3 mx-auto text-gray-500"></i>
             </button>
         </div>
+        
+        <!-- Settings Dropdown -->
+        <div class="stats-card rounded-xl p-4 shadow-lg mb-4 hidden" id="settings-dropdown">
+            <h3 class="text-sm font-semibold text-gray-800 mb-3">设置</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <label class="text-sm text-gray-600">番茄时间</label>
+                    <input type="number" value="25" min="1" max="60" class="w-16 px-2 py-1 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="text-sm text-gray-600">短休息时间</label>
+                    <input type="number" value="5" min="1" max="30" class="w-16 px-2 py-1 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="text-sm text-gray-600">长休息时间</label>
+                    <input type="number" value="15" min="1" max="60" class="w-16 px-2 py-1 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+            </div>
+        </div>
 
         <!-- Statistics -->
-        <div class="stats-card rounded-xl p-4 shadow-lg mb-4">
+        <div class="stats-card rounded-xl p-4 shadow-lg mb-4" id="stats-section">
             <div class="grid grid-cols-3 gap-4 text-center">
-                <div>
+                <div class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors" data-filter="today-tomato">
                     <div class="text-2xl font-bold text-purple-600">8</div>
                     <div class="text-xs text-gray-600">今日番茄</div>
                 </div>
-                <div>
+                <div class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors" data-filter="incomplete-tasks">
                     <div class="text-2xl font-bold text-blue-600">3</div>
-                    <div class="text-xs text-gray-600">未完成任务数</div>
+                    <div class="text-xs text-gray-600">未完成任务</div>
                 </div>
-                <div>
+                <div class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
                     <div class="text-2xl font-bold text-green-600">40/50</div>
                     <div class="text-xs text-gray-600">本周进度</div>
                 </div>
@@ -161,7 +195,7 @@
         </div>
 
         <!-- Task List -->
-        <div class="stats-card rounded-xl p-4 shadow-lg">
+        <div class="stats-card rounded-xl p-4 shadow-lg" id="tasks-section">
             <div class="flex items-center space-x-2 mb-3">
                 <input type="text" placeholder="添加新任务..." class="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                 <button class="p-2 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-lg">
@@ -171,25 +205,25 @@
                     <i data-lucide="plus" class="w-4 h-4"></i>
                 </button>
             </div>
-            <div class="space-y-2">
-                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+            <div class="space-y-2" id="task-list">
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item" data-tomato-count="2">
                     <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
-                    <span class="flex-1 text-sm text-gray-700">完成项目文档</span>
+                    <span class="flex-1 text-sm text-gray-700 task-name">完成项目文档</span>
                     <span class="text-xs text-gray-500">2</span>
                 </div>
-                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item" data-tomato-count="3">
                     <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
-                    <span class="flex-1 text-sm text-gray-700">学习新技术</span>
+                    <span class="flex-1 text-sm text-gray-700 task-name">学习新技术</span>
                     <span class="text-xs text-gray-500">3</span>
                 </div>
-                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item" data-tomato-count="1">
                     <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
-                    <span class="flex-1 text-sm text-gray-700">回复邮件</span>
+                    <span class="flex-1 text-sm text-gray-700 task-name">回复邮件</span>
                     <span class="text-xs text-gray-500">1</span>
                 </div>
-                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item" data-tomato-count="1">
                     <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500" checked>
-                    <span class="flex-1 text-sm text-gray-400 line-through">代码审查</span>
+                    <span class="flex-1 text-sm text-gray-400 line-through task-name">代码审查</span>
                     <span class="text-xs text-gray-400">1</span>
                 </div>
             </div>
@@ -268,6 +302,102 @@
                         break;
                 }
                 updateDisplay();
+            });
+        });
+        
+        // Navigation functionality
+        document.querySelectorAll('.nav-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const section = this.dataset.section;
+                const sectionElement = document.getElementById(section + '-section');
+                
+                if (sectionElement) {
+                    // Toggle visibility using class
+                    if (sectionElement.classList.contains('hidden')) {
+                        sectionElement.classList.remove('hidden');
+                        this.classList.add('bg-purple-100');
+                        this.classList.remove('bg-gray-100');
+                        this.querySelector('i').classList.add('text-purple-600');
+                        this.querySelector('i').classList.remove('text-gray-600');
+                    } else {
+                        sectionElement.classList.add('hidden');
+                        this.classList.remove('bg-purple-100');
+                        this.classList.add('bg-gray-100');
+                        this.querySelector('i').classList.remove('text-purple-600');
+                        this.querySelector('i').classList.add('text-gray-600');
+                    }
+                }
+            });
+        });
+        
+        // Settings dropdown functionality
+        document.getElementById('settings-dropdown-btn').addEventListener('click', function() {
+            const dropdown = document.getElementById('settings-dropdown');
+            const isHidden = dropdown.classList.toggle('hidden');
+            
+            // Toggle active state based on dropdown visibility
+            if (isHidden) {
+                this.classList.remove('active');
+            } else {
+                this.classList.add('active');
+            }
+        });
+        
+        // Statistics filter functionality
+        document.querySelectorAll('.stat-item').forEach(statItem => {
+            statItem.addEventListener('click', function() {
+                const filter = this.dataset.filter;
+                const taskItems = document.querySelectorAll('.task-item');
+                
+                // Reset all stats visual state
+                document.querySelectorAll('.stat-item').forEach(item => {
+                    item.classList.remove('bg-purple-50', 'border-purple-200');
+                });
+                
+                // Add visual feedback to clicked stat
+                this.classList.add('bg-purple-50', 'border-purple-200');
+                
+                // Filter tasks based on stat type
+                if (filter === 'today-tomato') {
+                    taskItems.forEach(item => {
+                        const tomatoCount = parseInt(item.dataset.tomatoCount) || 0;
+                        if (tomatoCount > 0) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                } else if (filter === 'incomplete-tasks') {
+                    taskItems.forEach(item => {
+                        const checkbox = item.querySelector('input[type="checkbox"]');
+                        if (checkbox && !checkbox.checked) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                } else {
+                    // If no filter or week-progress, show all tasks
+                    taskItems.forEach(item => {
+                        item.style.display = 'flex';
+                    });
+                }
+            });
+        });
+        
+        // Task selection functionality
+        document.querySelectorAll('.task-item').forEach(taskItem => {
+            taskItem.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const taskName = this.querySelector('.task-name').textContent;
+                    document.getElementById('current-task').textContent = taskName;
+                    
+                    // Visual feedback
+                    document.querySelectorAll('.task-item').forEach(item => {
+                        item.classList.remove('bg-purple-50', 'border-purple-200');
+                    });
+                    this.classList.add('bg-purple-50', 'border-purple-200');
+                }
             });
         });
         
