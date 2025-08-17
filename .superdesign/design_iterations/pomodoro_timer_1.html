@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .timer-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timer-circle::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .timer-display {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+        
+        .progress-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #10b981 0deg 270deg, #e5e7eb 270deg);
+            mask: radial-gradient(circle at center, transparent 60%, black 60%);
+            -webkit-mask: radial-gradient(circle at center, transparent 60%, black 60%);
+        }
+        
+        .mode-button {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .mode-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .mode-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .control-button {
+            transition: all 0.2s ease;
+        }
+        
+        .control-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .control-button:active {
+            transform: scale(0.95);
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-md">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="menu" class="w-5 h-5 text-white"></i>
+                </div>
+                <h1 class="text-lg font-medium text-gray-800">完成项目文档</h1>
+            </div>
+            <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="settings" class="w-5 h-5 text-gray-600"></i>
+            </div>
+        </div>
+
+        <!-- Main Timer Circle -->
+        <div class="flex justify-center mb-8">
+            <div class="timer-circle">
+                <div class="progress-ring"></div>
+                <div class="timer-display">
+                    <div class="text-5xl font-bold text-gray-800 mb-4">25:00</div>
+                    <div class="flex justify-center space-x-2">
+                        <button class="control-button bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow" title="开始">
+                            <i data-lucide="play" class="w-4 h-4"></i>
+                        </button>
+                        <button class="control-button bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-full shadow" title="暂停">
+                            <i data-lucide="pause" class="w-4 h-4"></i>
+                        </button>
+                        <button class="control-button bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full shadow" title="重置">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Mode Selection -->
+        <div class="grid grid-cols-4 gap-3 mb-8">
+            <button class="mode-button active bg-white rounded-xl p-4 text-center shadow-md">
+                <i data-lucide="clock" class="w-5 h-5 mx-auto mb-1 text-purple-600"></i>
+                <div class="text-xs text-green-600 font-medium">25min</div>
+            </button>
+            <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+                <div class="font-semibold text-sm">短休</div>
+                <div class="text-xs text-gray-500">5min</div>
+            </button>
+            <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+                <div class="font-semibold text-sm">长休</div>
+                <div class="text-xs text-gray-500">15min</div>
+            </button>
+            <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+                <div class="font-semibold text-sm">设置</div>
+                <i data-lucide="settings" class="w-3 h-3 mx-auto text-gray-500"></i>
+            </button>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-card rounded-xl p-4 shadow-lg mb-4">
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-purple-600">8</div>
+                    <div class="text-xs text-gray-600">今日番茄</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-blue-600">3</div>
+                    <div class="text-xs text-gray-600">未完成任务数</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-green-600">40/50</div>
+                    <div class="text-xs text-gray-600">本周进度</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="stats-card rounded-xl p-4 shadow-lg">
+            <div class="flex items-center space-x-2 mb-3">
+                <input type="text" placeholder="添加新任务..." class="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                <button class="p-2 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-lg">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </button>
+                <button class="p-2 text-purple-600 hover:text-purple-700 bg-purple-100 rounded-lg">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
+                    <span class="flex-1 text-sm text-gray-700">完成项目文档</span>
+                    <span class="text-xs text-gray-500">2</span>
+                </div>
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
+                    <span class="flex-1 text-sm text-gray-700">学习新技术</span>
+                    <span class="text-xs text-gray-500">3</span>
+                </div>
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500">
+                    <span class="flex-1 text-sm text-gray-700">回复邮件</span>
+                    <span class="text-xs text-gray-500">1</span>
+                </div>
+                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                    <input type="checkbox" class="w-5 h-5 text-purple-600 rounded-full border-2 border-gray-300 focus:ring-purple-500" checked>
+                    <span class="flex-1 text-sm text-gray-400 line-through">代码审查</span>
+                    <span class="text-xs text-gray-400">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Timer functionality will be added here
+        let timerInterval;
+        let isRunning = false;
+        let currentTime = 25 * 60; // 25 minutes in seconds
+        
+        function updateDisplay() {
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = currentTime % 60;
+            document.querySelector('.timer-display .text-5xl').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (currentTime > 0) {
+                        currentTime--;
+                        updateDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        // Timer completed
+                        alert('番茄时间完成！');
+                    }
+                }, 1000);
+            }
+        }
+        
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                isRunning = false;
+            }
+        }
+        
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            currentTime = 25 * 60;
+            updateDisplay();
+        }
+        
+        // Event listeners for control buttons
+        document.querySelectorAll('.timer-display .control-button')[0].addEventListener('click', startTimer);
+        document.querySelectorAll('.timer-display .control-button')[1].addEventListener('click', pauseTimer);
+        document.querySelectorAll('.timer-display .control-button')[2].addEventListener('click', resetTimer);
+        
+        // Mode selection functionality
+        document.querySelectorAll('.mode-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.mode-button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update timer based on mode
+                const modeText = this.querySelector('.font-semibold').textContent;
+                switch(modeText) {
+                    case '番茄':
+                        currentTime = 25 * 60;
+                        break;
+                    case '短休':
+                        currentTime = 5 * 60;
+                        break;
+                    case '长休':
+                        currentTime = 15 * 60;
+                        break;
+                }
+                updateDisplay();
+            });
+        });
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
