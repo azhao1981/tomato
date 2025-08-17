@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
+import { useTimerStore } from "./stores/timerStore";
 
 const greetMsg = ref("");
 const name = ref("");
+
+const timerStore = useTimerStore();
 
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -14,25 +17,108 @@ async function greet() {
 <template>
   <main class="container">
     <h1>Welcome to Tauri + Vue</h1>
-
-    <div class="row">
-      <a href="https://vite.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
+    
+    <!-- 番茄时钟测试界面 -->
+    <div class="timer-test">
+      <h2>番茄时钟测试 (Pinia 状态管理)</h2>
+      
+      <div class="timer-display">
+        <div class="time">{{ timerStore.formattedTime }}</div>
+        <div class="mode">当前模式: {{ timerStore.mode }}</div>
+        <div class="status">状态: {{ timerStore.isRunning ? '运行中' : '已停止' }}</div>
+      </div>
+      
+      <div class="controls">
+        <button @click="timerStore.startTimer" :disabled="timerStore.isRunning">
+          开始
+        </button>
+        <button @click="timerStore.pauseTimer" :disabled="!timerStore.isRunning">
+          暂停
+        </button>
+        <button @click="timerStore.resetTimer">
+          重置
+        </button>
+      </div>
+      
+      <div class="mode-selector">
+        <button 
+          @click="timerStore.setMode('pomodoro')" 
+          :class="{ active: timerStore.mode === 'pomodoro' }"
+        >
+          番茄时间
+        </button>
+        <button 
+          @click="timerStore.setMode('shortBreak')" 
+          :class="{ active: timerStore.mode === 'shortBreak' }"
+        >
+          短休息
+        </button>
+        <button 
+          @click="timerStore.setMode('longBreak')" 
+          :class="{ active: timerStore.mode === 'longBreak' }"
+        >
+          长休息
+        </button>
+      </div>
+      
+      <div class="settings">
+        <h3>设置</h3>
+        <div class="setting-item">
+          <label>番茄时间 (分钟):</label>
+          <input 
+            type="number" 
+            v-model.number="timerStore.settings.pomodoroTime" 
+            min="1" 
+            max="60"
+            @change="timerStore.updateSettings(timerStore.settings)"
+          >
+        </div>
+        <div class="setting-item">
+          <label>短休息时间 (分钟):</label>
+          <input 
+            type="number" 
+            v-model.number="timerStore.settings.shortBreakTime" 
+            min="1" 
+            max="30"
+            @change="timerStore.updateSettings(timerStore.settings)"
+          >
+        </div>
+        <div class="setting-item">
+          <label>长休息时间 (分钟):</label>
+          <input 
+            type="number" 
+            v-model.number="timerStore.settings.longBreakTime" 
+            min="1" 
+            max="60"
+            @change="timerStore.updateSettings(timerStore.settings)"
+          >
+        </div>
+      </div>
     </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
 
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
+    <hr class="divider">
+    
+    <div class="original-demo">
+      <h2>原始 Tauri 示例</h2>
+      <div class="row">
+        <a href="https://vite.dev" target="_blank">
+          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
+        </a>
+        <a href="https://tauri.app" target="_blank">
+          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
+        </a>
+        <a href="https://vuejs.org/" target="_blank">
+          <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+        </a>
+      </div>
+      <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+
+      <form class="row" @submit.prevent="greet">
+        <input id="greet-input" v-model="name" placeholder="Enter a name..." />
+        <button type="submit">Greet</button>
+      </form>
+      <p>{{ greetMsg }}</p>
+    </div>
   </main>
 </template>
 
@@ -43,6 +129,143 @@ async function greet() {
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #249b73);
+}
+
+/* 番茄时钟测试界面样式 */
+.timer-test {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.timer-display {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.timer-display .time {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-display .mode,
+.timer-display .status {
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.controls button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controls button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.controls button:first-child {
+  background: #27ae60;
+  color: white;
+}
+
+.controls button:nth-child(2) {
+  background: #f39c12;
+  color: white;
+}
+
+.controls button:nth-child(3) {
+  background: #e74c3c;
+  color: white;
+}
+
+.mode-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.mode-selector button {
+  padding: 0.5rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-selector button:hover {
+  border-color: #3498db;
+}
+
+.mode-selector button.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.settings {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.settings h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.setting-item label {
+  font-weight: 500;
+  color: #555;
+}
+
+.setting-item input {
+  width: 80px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid #eee;
+  margin: 3rem 0;
+}
+
+.original-demo {
+  margin-top: 2rem;
 }
 
 </style>
