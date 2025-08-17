@@ -74,6 +74,110 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 前端输入框和按钮，调用 Rust 的 `greet` 命令
 - Rust 端接收名称参数，返回格式化的问候语
 
+## 开发原则
+
+### 增量开发
+1. **每次少量修改** - 每次只修改少量代码，确保代码能正常运行
+2. **保持可用性** - 每次修改后代码都应该是可运行的
+3. **验证分离** - 开发者负责编码，验证由用户执行（如 `pnpm dev` 等命令）
+
+### 番茄时钟功能开发
+
+#### 设计参考
+- 设计文件：`.superdesign/design_iterations/pomodoro_timer_1.html`
+- 设计分析：`docs/设计分析.md`
+
+#### 组件结构规划
+```
+src/
+├── components/
+│   ├── TimerCircle.vue          # 计时器圆形组件
+│   ├── ModeSelector.vue         # 模式选择组件
+│   ├── SettingsPanel.vue        # 设置面板组件
+│   ├── StatisticsCards.vue      # 统计数据组件
+│   ├── TaskList.vue             # 任务列表组件
+│   └── Header.vue               # 头部导航组件
+├── stores/
+│   └── timerStore.js            # Pinia 状态管理
+├── utils/
+│   └── timerUtils.js            # 计时器工具函数
+└── views/
+    └── Home.vue                 # 主页面
+```
+
+#### 实现阶段
+1. **第一阶段** - 基础组件：计时器、模式选择、头部导航
+2. **第二阶段** - 功能组件：设置面板、统计数据、任务列表
+3. **第三阶段** - 状态管理：Pinia 状态和工具函数
+4. **第四阶段** - 集成优化：组件整合和性能优化
+
+#### 关键技术要点
+- 使用 Vue 3 Composition API
+- Pinia 状态管理
+- Tailwind CSS 样式
+- Lucide Icons 图标
+- TypeScript 类型支持
+
+### 前端技术依赖添加计划
+
+#### 1. Pinia 状态管理
+**添加步骤：**
+1. 安装 Pinia：`pnpm add pinia`
+2. 在 `main.ts` 中配置 Pinia
+3. 创建 `stores/timerStore.js` 状态管理文件
+4. 在组件中使用 `useTimerStore()`
+
+**验证步骤：**
+- 运行 `pnpm dev` 确保应用启动正常
+- 在浏览器开发者工具中检查 Pinia DevTools 是否正常工作
+- 测试状态的基本读写功能
+
+#### 2. Lucide Icons 图标库
+**添加步骤：**
+1. 安装 Lucide Vue：`pnpm add lucide-vue-next`
+2. 在 `main.ts` 中注册 Lucide 插件
+3. 在组件中导入和使用图标
+4. 替换设计中的 SVG 图标为 Lucide 组件
+
+**验证步骤：**
+- 运行 `pnpm dev` 确保应用启动正常
+- 检查图标是否正确显示
+- 测试图标的动态属性（颜色、大小等）
+
+#### 3. 其他可能需要的依赖
+**日期时间处理：**
+- 安装：`pnpm add dayjs`
+- 用途：处理时间格式化、计算等
+
+**本地存储：**
+- 安装：`pnpm add localforage`
+- 用途：持久化任务和设置数据
+
+**验证步骤：**
+- 每添加一个依赖后运行 `pnpm dev` 测试
+- 检查依赖是否正常工作
+- 确保没有版本冲突
+
+### 开发工作流程
+
+#### 每次开发循环
+1. **规划** - 确定本次要实现的具体功能
+2. **编码** - 编写少量代码（1-2 个文件）
+3. **自检** - 检查语法错误和逻辑问题
+4. **提交** - 提交代码变更
+5. **验证** - 用户执行 `pnpm dev` 进行功能验证
+
+#### 代码质量检查
+- 使用 TypeScript 类型检查
+- 遵循 Vue 3 组件编写规范
+- 保持代码简洁和可读性
+- 添加必要的注释
+
+#### 错误处理
+- 添加适当的错误边界
+- 处理异步操作的异常情况
+- 提供用户友好的错误提示
+
 When asked to design UI & frontend interface
 When asked to design UI & frontend interface
 # Role
