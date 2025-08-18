@@ -113,6 +113,8 @@ export const useTimerStore = defineStore('timer', {
         this.currentTime--
       } else {
         this.pauseTimer()
+        // 发射计时完成事件，通知外部清除定时器
+        timerEvents.emit('timerCompleted')
         // 如果是番茄模式完成，发射完成事件
         if (this.mode === 'pomodoro') {
           timerEvents.emit('pomodoroCompleted')

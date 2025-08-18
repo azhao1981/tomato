@@ -28,8 +28,16 @@ onMounted(async () => {
   await taskStore.loadTasks();
   await statisticsStore.loadStatistics();
   
-  // 监听番茄时钟完成事件
+  // 监听计时器完成事件
   import('./stores/timerStore').then(({ timerEvents }) => {
+    timerEvents.on('timerCompleted', () => {
+      // 清除定时器，停止计时
+      if (timerInterval.value) {
+        clearInterval(timerInterval.value);
+        timerInterval.value = null;
+      }
+    });
+    
     timerEvents.on('pomodoroCompleted', async () => {
       await statisticsStore.completeTomato();
       // 给当前任务增加番茄数
