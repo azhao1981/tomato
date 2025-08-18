@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useTaskStore } from '../stores/taskStore'
 import { Menu, Clock, Settings, BarChart3, ListChecks } from 'lucide-vue-next'
 
 // 定义 props
@@ -17,8 +18,12 @@ const emit = defineEmits<{
   modeSelectorClick: []
 }>()
 
+const taskStore = useTaskStore()
+
 // 当前任务标题
-const taskTitle = ref('完成项目文档')
+const taskTitle = computed(() => {
+  return taskStore.currentTask?.name || '完成项目文档'
+})
 </script>
 
 <template>

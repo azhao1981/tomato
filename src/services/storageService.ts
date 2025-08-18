@@ -10,6 +10,7 @@ interface Task {
   id?: string
   title: string
   completed: boolean
+  tomatoCount?: number
   createdAt?: Date | string
 }
 
@@ -37,6 +38,7 @@ export const storage = {
       id: String(task.id),
       title: String(task.title),
       completed: Boolean(task.completed),
+      tomatoCount: Number(task.tomatoCount || 1),
       createdAt: task.createdAt ? new Date(task.createdAt).toISOString() : new Date().toISOString()
     }))
     return await taskStore.setItem('tasks', serializableTasks)
@@ -48,6 +50,7 @@ export const storage = {
       id: String(task.id || Date.now().toString()),
       title: String(task.title),
       completed: Boolean(task.completed),
+      tomatoCount: Number(task.tomatoCount || 1),
       createdAt: task.createdAt ? new Date(task.createdAt) : new Date()
     }
     tasks.push(newTask)

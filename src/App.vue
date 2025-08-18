@@ -2,6 +2,7 @@
 import { ref, onUnmounted, onMounted } from "vue";
 import { useTimerStore } from "./stores/timerStore";
 import { useUIStore } from "./stores/uiStore";
+import { useTaskStore } from "./stores/taskStore";
 import Header from "./components/Header.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
@@ -16,11 +17,13 @@ import StorageTest from "./components/StorageTest.vue";
 
 const timerStore = useTimerStore();
 const uiStore = useUIStore();
+const taskStore = useTaskStore();
 const timerInterval = ref<number | null>(null);
 
 // 组件挂载时加载设置
 onMounted(async () => {
   await timerStore.loadSettings();
+  await taskStore.loadTasks();
 });
 
 // 显示/隐藏设置面板功能已移至 ModeSelector 组件内部
