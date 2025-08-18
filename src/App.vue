@@ -48,10 +48,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="container">
+  <main class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
     <!-- 番茄时钟测试界面 -->
-    <div class="timer-test">
-      <h2>番茄时钟测试 (Pinia 状态管理)</h2>
+    <div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl w-full">
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
+        番茄时钟测试 (Pinia 状态管理)
+      </h2>
       
       <!-- Lucide 图标测试 -->
       <IconTest />
@@ -71,17 +73,5 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.timer-test {
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.container {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
+/* 移除原有样式，使用 Tailwind CSS */
 </style>
