@@ -5,8 +5,8 @@ import { Search, Plus } from 'lucide-vue-next'
 
 const taskStore = useTaskStore()
 
-// 新任务输入
-const newTaskName = ref('')
+// 输入框内容
+const inputText = ref('')
 
 // 计算未完成任务数量
 const incompleteTasksCount = computed(() => {
@@ -16,11 +16,46 @@ const incompleteTasksCount = computed(() => {
 // 在模板中使用这个计算属性
 console.log('未完成任务数量:', incompleteTasksCount.value)
 
-// 添加新任务
-function addTask() {
-  if (newTaskName.value.trim()) {
-    taskStore.addTask(newTaskName.value.trim())
-    newTaskName.value = ''
+// 处理输入框回车事件
+function handleInputEnter() {
+  if (taskStore.isSearchMode) {
+    // 搜索模式：执行搜索并切换到添加模式
+    taskStore.setSearchQuery(inputText.value)
+    activateAddMode()
+    inputText.value = ''
+  } else {
+    // 添加模式：添加任务
+    if (inputText.value.trim()) {
+      taskStore.addTask(inputText.value.trim())
+      inputText.value = ''
+    }
+  }
+}
+
+// 切换到搜索模式
+function activateSearchMode() {
+  if (inputText.value.trim()) {
+    // 有输入内容时直接执行搜索，保持搜索模式
+    taskStore.setSearchQuery(inputText.value.trim())
+    taskStore.setSearchMode(true)
+    inputText.value = ''
+  } else {
+    // 没有输入内容时显示全部，切换到搜索模式
+    taskStore.setSearchQuery('')
+    taskStore.setSearchMode(true)
+  }
+}
+
+// 切换到添加模式
+function activateAddMode() {
+  if (inputText.value.trim()) {
+    // 有输入内容时直接添加任务，切换到添加模式
+    taskStore.addTask(inputText.value.trim())
+    taskStore.setSearchMode(false)
+    inputText.value = ''
+  } else {
+    // 没有输入内容时切换到添加模式
+    taskStore.setSearchMode(false)
   }
 }
 
@@ -39,36 +74,29 @@ function selectTask(taskId: string) {
 function deleteTask(taskId: string) {
   taskStore.deleteTask(taskId)
 }
-
-// 搜索任务
-const searchQuery = ref('')
-const filteredTasks = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return taskStore.tasks
-  }
-  return taskStore.tasks.filter(task => 
-    task.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
 </script>
 
 <template>
   <div class="stats-card rounded-xl p-4 shadow-lg mt-4">
-    <!-- 任务输入区域 -->
+    <!-- 任务输入/搜索区域 -->
     <div class="flex items-center space-x-2 mb-3">
       <input 
-        v-model="newTaskName"
-        @keyup.enter="addTask"
-        type="text" 
-        placeholder="添加新任务..." 
+        v-model="inputText"
+        @keyup.enter="handleInputEnter"
+        :placeholder="taskStore.isSearchMode ? '搜索任务...' : '添加新任务...'"
         class="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
       >
-      <button class="p-2 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-lg transition-colors">
+      <button 
+        @click="activateSearchMode"
+        :class="taskStore.isSearchMode ? 'text-purple-600 bg-purple-100' : 'text-gray-500 hover:text-gray-700 bg-gray-100'"
+        class="p-2 rounded-lg transition-colors"
+      >
         <Search :size="16" />
       </button>
       <button 
-        @click="addTask"
-        class="p-2 text-purple-600 hover:text-purple-700 bg-purple-100 rounded-lg transition-colors"
+        @click="activateAddMode"
+        :class="!taskStore.isSearchMode ? 'text-purple-600 bg-purple-100' : 'text-gray-500 hover:text-gray-700 bg-gray-100'"
+        class="p-2 rounded-lg transition-colors"
       >
         <Plus :size="16" />
       </button>
@@ -77,7 +105,7 @@ const filteredTasks = computed(() => {
     <!-- 任务列表 -->
     <div class="space-y-2">
       <div 
-        v-for="task in filteredTasks" 
+        v-for="task in taskStore.filteredTasks" 
         :key="task.id"
         class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item transition-colors"
         :class="{ 'opacity-60': task.completed }"
@@ -97,7 +125,6 @@ const filteredTasks = computed(() => {
           {{ task.name }}
         </span>
         <span 
-          v-if="task.tomatoCount > 0"
           class="text-xs"
           :class="task.completed ? 'text-gray-400' : 'text-gray-500'"
         >

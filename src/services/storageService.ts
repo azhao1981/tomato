@@ -8,10 +8,12 @@ interface TimerSettings {
 
 interface Task {
   id?: string
+  name?: string
   title: string
   completed: boolean
   tomatoCount?: number
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 // 配置存储实例
@@ -36,10 +38,11 @@ export const storage = {
     // 创建可序列化的对象副本
     const serializableTasks = tasks.map(task => ({
       id: String(task.id),
-      title: String(task.title),
+      title: String(task.name || task.title),
       completed: Boolean(task.completed),
-      tomatoCount: Number(task.tomatoCount || 1),
-      createdAt: task.createdAt ? new Date(task.createdAt).toISOString() : new Date().toISOString()
+      tomatoCount: Number(task.tomatoCount || 0),
+      createdAt: task.createdAt ? new Date(task.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: task.updatedAt ? new Date(task.updatedAt).toISOString() : new Date().toISOString()
     }))
     return await taskStore.setItem('tasks', serializableTasks)
   },
@@ -48,10 +51,11 @@ export const storage = {
     const tasks = await this.getTasks()
     const newTask = {
       id: String(task.id || Date.now().toString()),
-      title: String(task.title),
+      title: String(task.name || task.title),
       completed: Boolean(task.completed),
-      tomatoCount: Number(task.tomatoCount || 1),
-      createdAt: task.createdAt ? new Date(task.createdAt) : new Date()
+      tomatoCount: Number(task.tomatoCount || 0),
+      createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
+      updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date()
     }
     tasks.push(newTask)
     return await this.saveTasks(tasks)

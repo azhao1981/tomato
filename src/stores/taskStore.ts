@@ -4,24 +4,30 @@ import { storage } from '../services/storageService'
 interface Task {
   id: string
   name: string
+  title?: string
   completed: boolean
   tomatoCount: number
+  updatedAt: Date
 }
 
 interface TaskState {
   tasks: Task[]
   currentTaskId: string | null
+  searchQuery: string
+  isSearchMode: boolean
 }
 
 export const useTaskStore = defineStore('tasks', {
   state: (): TaskState => ({
     tasks: [
-      { id: '1', name: '完成项目文档', completed: false, tomatoCount: 2 },
-      { id: '2', name: '学习新技术', completed: false, tomatoCount: 3 },
-      { id: '3', name: '回复邮件', completed: false, tomatoCount: 1 },
-      { id: '4', name: '代码审查', completed: true, tomatoCount: 1 }
+      { id: '1', name: '完成项目文档', completed: false, tomatoCount: 2, updatedAt: new Date('2024-01-01') },
+      { id: '2', name: '学习新技术', completed: false, tomatoCount: 3, updatedAt: new Date('2024-01-02') },
+      { id: '3', name: '回复邮件', completed: false, tomatoCount: 1, updatedAt: new Date('2024-01-03') },
+      { id: '4', name: '代码审查', completed: true, tomatoCount: 1, updatedAt: new Date('2024-01-04') }
     ],
-    currentTaskId: null
+    currentTaskId: null,
+    searchQuery: '',
+    isSearchMode: false
   }),
   getters: {
     incompleteTasks: (state) => {
@@ -35,6 +41,18 @@ export const useTaskStore = defineStore('tasks', {
     },
     incompleteTasksCount: (state) => {
       return state.tasks.filter(task => !task.completed).length
+    },
+    filteredTasks: (state) => {
+      let tasks = state.tasks
+      if (!state.searchQuery.trim()) {
+        tasks = state.tasks
+      } else {
+        tasks = state.tasks.filter(task => 
+          task.name.toLowerCase().includes(state.searchQuery.toLowerCase())
+        )
+      }
+      // 按最后更新时间降序排列
+      return tasks.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
     }
   },
   actions: {
@@ -42,7 +60,14 @@ export const useTaskStore = defineStore('tasks', {
       try {
         const tasks = await storage.getTasks()
         if (tasks && tasks.length > 0) {
-          this.tasks = tasks
+          // 转换存储的任务格式为内部格式
+          this.tasks = tasks.map(task => ({
+            id: String(task.id),
+            name: String(task.title || task.name),
+            completed: Boolean(task.completed),
+            tomatoCount: Number(task.tomatoCount || 0),
+            updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date()
+          }))
         }
       } catch (error) {
         console.error('加载任务失败:', error)
@@ -62,7 +87,8 @@ export const useTaskStore = defineStore('tasks', {
         id: Date.now().toString(),
         name: name.trim(),
         completed: false,
-        tomatoCount: 1
+        tomatoCount: 0,
+        updatedAt: new Date()
       }
       this.tasks.push(newTask)
       this.saveTasks()
@@ -72,6 +98,7 @@ export const useTaskStore = defineStore('tasks', {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.completed = !task.completed
+        task.updatedAt = new Date()
         this.saveTasks()
       }
     },
@@ -96,6 +123,7 @@ export const useTaskStore = defineStore('tasks', {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.tomatoCount++
+        task.updatedAt = new Date()
         this.saveTasks()
       }
     },
@@ -106,6 +134,17 @@ export const useTaskStore = defineStore('tasks', {
         this.currentTaskId = null
       }
       this.saveTasks()
+    },
+    
+    setSearchQuery(query: string) {
+      this.searchQuery = query
+    },
+    
+    setSearchMode(isSearch: boolean) {
+      this.isSearchMode = isSearch
+      if (!isSearch) {
+        this.searchQuery = ''
+      }
     }
   }
 })
