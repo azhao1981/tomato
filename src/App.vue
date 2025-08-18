@@ -23,10 +23,7 @@ onMounted(async () => {
   await timerStore.loadSettings();
 });
 
-// 显示/隐藏设置面板
-function toggleSettings() {
-  uiStore.toggleSettingsPanel();
-}
+// 显示/隐藏设置面板功能已移至 ModeSelector 组件内部
 
 // Header 组件事件处理
 function handleMenuClick() {
@@ -38,6 +35,16 @@ function handleTimerClick() {
 }
 
 function handleSettingsClick() {
+  uiStore.toggleSettingsPanel();
+}
+
+function handleModeSelectorClick() {
+  // 只切换 ModeSelector 的显示状态，不改变 SettingsPanel 状态
+  uiStore.toggleModeSelector();
+}
+
+function handleInternalSettingsClick() {
+  // 内部设置按钮只切换 SettingsPanel 的显示状态
   uiStore.toggleSettingsPanel();
 }
 
@@ -86,6 +93,7 @@ onUnmounted(() => {
       @menu-click="handleMenuClick"
       @timer-click="handleTimerClick"
       @settings-click="handleSettingsClick"
+      @mode-selector-click="handleModeSelectorClick"
       @stats-click="handleStatsClick"
       @tasks-click="handleTasksClick"
     />
@@ -102,10 +110,10 @@ onUnmounted(() => {
       </div>
 
       <!-- Mode Selection -->
-      <ModeSelector v-if="uiStore.showModeSelector" @settings-click="toggleSettings" />
+      <ModeSelector v-if="uiStore.showModeSelector" @settings-click="handleInternalSettingsClick" />
       
       <!-- Settings Panel -->
-      <SettingsPanel v-if="uiStore.showSettingsPanel" />
+      <SettingsPanel v-if="uiStore.showModeSelector && uiStore.showSettingsPanel" />
       
       <!-- Statistics Panel -->
       <StatisticsPanel v-if="uiStore.showStatisticsCards" />

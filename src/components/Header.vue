@@ -14,6 +14,7 @@ const emit = defineEmits<{
   settingsClick: []
   statsClick: []
   tasksClick: []
+  modeSelectorClick: []
 }>()
 
 // 当前任务标题
@@ -54,12 +55,12 @@ const taskTitle = ref('完成项目文档')
           <Clock :size="20" class="text-gray-600" />
         </button>
         
-        <!-- 设置按钮 -->
+        <!-- 设置按钮 - 控制模式选择组件 -->
         <button 
-          @click="emit('settingsClick')"
+          @click="emit('modeSelectorClick')"
           class="nav-icon w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors"
-          aria-label="设置"
-          title="设置"
+          aria-label="模式选择"
+          title="模式选择"
         >
           <Settings :size="20" class="text-gray-600" />
         </button>
