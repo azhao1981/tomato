@@ -33,6 +33,12 @@ export const useTimerStore = defineStore('timer', {
     progressPercentage: (state) => {
       const totalTime = state.settings[state.mode === 'pomodoro' ? 'pomodoroTime' : state.mode === 'shortBreak' ? 'shortBreakTime' : 'longBreakTime'] * 60
       return ((totalTime - state.currentTime) / totalTime) * 100
+    },
+    remainingTime: (state) => {
+      return state.currentTime
+    },
+    duration: (state) => {
+      return state.settings[state.mode === 'pomodoro' ? 'pomodoroTime' : state.mode === 'shortBreak' ? 'shortBreakTime' : 'longBreakTime'] * 60
     }
   },
   actions: {

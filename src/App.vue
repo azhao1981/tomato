@@ -6,17 +6,24 @@ import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
 import ModeSelector from "./components/ModeSelector.vue";
 import TimerSettings from "./components/TimerSettings.vue";
+import SettingsPanel from "./components/SettingsPanel.vue";
 import IconTest from "./components/IconTest.vue";
 import TimeUtilsTest from "./components/TimeUtilsTest.vue";
 import StorageTest from "./components/StorageTest.vue";
 
 const timerStore = useTimerStore();
 const timerInterval = ref<number | null>(null);
+const showSettings = ref(false);
 
 // 组件挂载时加载设置
 onMounted(async () => {
   await timerStore.loadSettings();
 });
+
+// 显示/隐藏设置面板
+function toggleSettings() {
+  showSettings.value = !showSettings.value;
+}
 
 // Header 组件事件处理
 function handleMenuClick() {
@@ -80,38 +87,31 @@ onUnmounted(() => {
       @tasks-click="handleTasksClick"
     />
     
-    <!-- 计时器圆形组件 -->
-    <div class="flex justify-center py-6">
-      <div class="container mx-auto px-4 max-w-md">
+    <!-- 主要内容区域 -->
+    <div class="container mx-auto px-4 py-6 max-w-md">
+      <!-- Main Timer Circle -->
+      <div class="flex justify-center mb-8">
         <TimerDisplay>
           <template #controls>
             <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
           </template>
         </TimerDisplay>
       </div>
+
+      <!-- Mode Selection -->
+      <ModeSelector @settings-click="toggleSettings" />
+      
+      <!-- Settings Panel -->
+      <SettingsPanel v-if="showSettings" />
     </div>
-    
-    <!-- 主要内容区域 -->
-    <main class="flex flex-col items-center justify-center p-4">
-      <!-- 番茄时钟测试界面 -->
-      <div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl w-full">
-        <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
-          番茄时钟测试 (Pinia 状态管理)
-        </h2>
-        
-        <!-- Lucide 图标测试 -->
-        <IconTest />
-        
-        <!-- dayjs 时间处理工具测试 -->
-        <TimeUtilsTest />
-        
-        <!-- localforage 本地存储测试 -->
-        <StorageTest />
-        
-        <ModeSelector />
-        <TimerSettings />
-      </div>
-    </main>
+
+    <!-- 隐藏的测试组件（用于开发验证） -->
+    <div class="hidden">
+      <IconTest />
+      <TimeUtilsTest />
+      <StorageTest />
+      <TimerSettings />
+    </div>
   </div>
 </template>
 

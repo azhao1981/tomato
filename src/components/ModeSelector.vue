@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
-import { Clock, Coffee, Moon, Settings } from 'lucide-vue-next'
+import { Clock, Coffee, Settings } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
+
+// 定义事件
+const emit = defineEmits<{
+  'settings-click': []
+}>()
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-3 mb-8">
+  <div class="grid grid-cols-4 gap-3">
     <button 
       @click="timerStore.setMode('pomodoro')" 
       :class="{ active: timerStore.mode === 'pomodoro' }"
@@ -14,7 +19,7 @@ const timerStore = useTimerStore()
     >
       <Clock :size="20" class="mx-auto mb-1" :class="timerStore.mode === 'pomodoro' ? 'text-purple-600' : 'text-gray-600'" />
       <div class="text-xs font-medium" :class="timerStore.mode === 'pomodoro' ? 'text-green-600' : 'text-gray-500'">
-        25min
+        {{ timerStore.settings.pomodoroTime }}min
       </div>
     </button>
     
@@ -24,7 +29,9 @@ const timerStore = useTimerStore()
       class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
     >
       <div class="font-semibold text-sm">短休</div>
-      <div class="text-xs" :class="timerStore.mode === 'shortBreak' ? 'text-green-600' : 'text-gray-500'">5min</div>
+      <div class="text-xs" :class="timerStore.mode === 'shortBreak' ? 'text-green-600' : 'text-gray-500'">
+        {{ timerStore.settings.shortBreakTime }}min
+      </div>
     </button>
     
     <button 
@@ -33,12 +40,17 @@ const timerStore = useTimerStore()
       class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
     >
       <div class="font-semibold text-sm">长休</div>
-      <div class="text-xs" :class="timerStore.mode === 'longBreak' ? 'text-green-600' : 'text-gray-500'">15min</div>
+      <div class="text-xs" :class="timerStore.mode === 'longBreak' ? 'text-green-600' : 'text-gray-500'">
+        {{ timerStore.settings.longBreakTime }}min
+      </div>
     </button>
     
-    <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+    <button 
+      @click="emit('settings-click')" 
+      class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
+    >
       <div class="font-semibold text-sm">设置</div>
-      <Settings :size="12" class="mx-auto text-gray-500" />
+      <Settings :size="16" class="mx-auto mt-1 text-gray-600" />
     </button>
   </div>
 </template>

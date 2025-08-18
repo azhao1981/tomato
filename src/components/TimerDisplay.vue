@@ -4,16 +4,9 @@ import { useTimerStore } from '../stores/timerStore'
 
 const timerStore = useTimerStore()
 
-// 计算进度百分比
-const progress = computed(() => {
-  const totalTime = timerStore.duration
-  const remainingTime = timerStore.remainingTime
-  return ((totalTime - remainingTime) / totalTime) * 100
-})
-
 // 计算进度环的样式
 const progressStyle = computed(() => {
-  const angle = (progress.value / 100) * 360
+  const angle = (timerStore.progressPercentage / 100) * 360
   return {
     background: `conic-gradient(from 0deg, #10b981 0deg ${angle}deg, #e5e7eb ${angle}deg)`
   }
@@ -21,16 +14,14 @@ const progressStyle = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-center">
-    <div class="timer-circle">
-      <div class="progress-ring" :style="progressStyle"></div>
-      <div class="timer-display">
-        <div class="text-5xl font-bold text-gray-800 mb-4 tabular-nums">
-          {{ timerStore.formattedTime }}
-        </div>
-        <div class="flex justify-center space-x-2">
-          <slot name="controls"></slot>
-        </div>
+  <div class="timer-circle">
+    <div class="progress-ring" :style="progressStyle"></div>
+    <div class="timer-display">
+      <div class="text-5xl font-bold text-gray-800 mb-4 tabular-nums">
+        {{ timerStore.formattedTime }}
+      </div>
+      <div class="flex justify-center space-x-2">
+        <slot name="controls"></slot>
       </div>
     </div>
   </div>
