@@ -21,7 +21,7 @@ const progressStyle = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-center my-8">
+  <div class="flex justify-center">
     <div class="timer-circle">
       <div class="progress-ring" :style="progressStyle"></div>
       <div class="timer-display">

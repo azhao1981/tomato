@@ -70,7 +70,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
     <!-- 头部导航 -->
     <Header 
       @menu-click="handleMenuClick"
@@ -80,8 +80,19 @@ onUnmounted(() => {
       @tasks-click="handleTasksClick"
     />
     
+    <!-- 计时器圆形组件 -->
+    <div class="flex justify-center py-6">
+      <div class="container mx-auto px-4 max-w-md">
+        <TimerDisplay>
+          <template #controls>
+            <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
+          </template>
+        </TimerDisplay>
+      </div>
+    </div>
+    
     <!-- 主要内容区域 -->
-    <main class="flex flex-col items-center justify-center p-4 pt-6">
+    <main class="flex flex-col items-center justify-center p-4">
       <!-- 番茄时钟测试界面 -->
       <div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl w-full">
         <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
@@ -97,11 +108,6 @@ onUnmounted(() => {
         <!-- localforage 本地存储测试 -->
         <StorageTest />
         
-        <TimerDisplay>
-          <template #controls>
-            <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
-          </template>
-        </TimerDisplay>
         <ModeSelector />
         <TimerSettings />
       </div>
