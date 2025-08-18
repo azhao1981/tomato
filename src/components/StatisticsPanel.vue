@@ -18,6 +18,13 @@ const weeklyProgressPercentage = computed(() => {
 function handleStatClick(statType: string) {
   console.log(`统计项被点击: ${statType}`)
   // 这里可以添加过滤逻辑，比如过滤任务列表
+  
+  // 触发自定义事件，让父组件处理
+  const event = new CustomEvent('stat-click', { 
+    detail: { type: statType },
+    bubbles: true
+  })
+  document.dispatchEvent(event)
 }
 </script>
 

@@ -8,6 +8,7 @@ import ModeSelector from "./components/ModeSelector.vue";
 import TimerSettings from "./components/TimerSettings.vue";
 import SettingsPanel from "./components/SettingsPanel.vue";
 import StatisticsPanel from "./components/StatisticsPanel.vue";
+import TaskList from "./components/TaskList.vue";
 import IconTest from "./components/IconTest.vue";
 import TimeUtilsTest from "./components/TimeUtilsTest.vue";
 import StorageTest from "./components/StorageTest.vue";
@@ -107,6 +108,9 @@ onUnmounted(() => {
       
       <!-- Statistics Panel -->
       <StatisticsPanel />
+      
+      <!-- Task List -->
+      <TaskList />
     </div>
 
     <!-- 隐藏的测试组件（用于开发验证） -->
