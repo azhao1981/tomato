@@ -1,21 +1,15 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { useStatisticsStore } from '../stores/statisticsStore'
+import { useTaskStore } from '../stores/taskStore'
 
-// 模拟统计数据，实际项目中应该从 store 或 API 获取
-const stats = ref({
-  todayTomato: 8,
-  incompleteTasks: 3,
-  weeklyProgress: '40/50'
-})
+const statisticsStore = useStatisticsStore()
+const taskStore = useTaskStore()
 
-// 计算本周进度百分比
-const weeklyProgressPercentage = computed(() => {
-  const [completed, total] = stats.value.weeklyProgress.split('/').map(Number)
-  return Math.round((completed / total) * 100)
-})
-
-// 在模板中使用这个计算属性
-console.log('本周进度百分比:', weeklyProgressPercentage.value)
+// 获取统计数据
+const todayStats = computed(() => statisticsStore.todayStats)
+const thisWeekStats = computed(() => statisticsStore.thisWeekStats)
+const incompleteTasksCount = computed(() => taskStore.incompleteTasksCount)
 
 // 处理统计项点击
 function handleStatClick(statType: string) {
@@ -38,22 +32,22 @@ function handleStatClick(statType: string) {
         class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
         @click="handleStatClick('today-tomato')"
       >
-        <div class="text-2xl font-bold text-purple-600">{{ stats.todayTomato }}</div>
+        <div class="text-2xl font-bold text-purple-600">{{ todayStats.tomatoCount }}</div>
         <div class="text-xs text-gray-600">今日番茄</div>
       </div>
       <div 
         class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
         @click="handleStatClick('incomplete-tasks')"
       >
-        <div class="text-2xl font-bold text-blue-600">{{ stats.incompleteTasks }}</div>
+        <div class="text-2xl font-bold text-blue-600">{{ incompleteTasksCount }}</div>
         <div class="text-xs text-gray-600">未完成任务</div>
       </div>
       <div 
         class="stat-item cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
-        @click="handleStatClick('weekly-progress')"
+        @click="handleStatClick('weekly-tomato')"
       >
-        <div class="text-2xl font-bold text-green-600">{{ stats.weeklyProgress }}</div>
-        <div class="text-xs text-gray-600">本周进度</div>
+        <div class="text-2xl font-bold text-green-600">{{ thisWeekStats.tomatoCount }}</div>
+        <div class="text-xs text-gray-600">本周番茄</div>
       </div>
     </div>
   </div>

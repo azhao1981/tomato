@@ -16,6 +16,17 @@ interface Task {
   updatedAt?: Date | string
 }
 
+interface Statistics {
+  dailyStats: Array<{
+    date: string
+    tomatoCount: number
+  }>
+  weeklyStats: Array<{
+    week: string
+    tomatoCount: number
+  }>
+}
+
 // 配置存储实例
 const taskStore = localforage.createInstance({
   name: 'tomato-timer',
@@ -25,6 +36,11 @@ const taskStore = localforage.createInstance({
 const settingsStore = localforage.createInstance({
   name: 'tomato-timer',
   storeName: 'settings'
+})
+
+const statisticsStore = localforage.createInstance({
+  name: 'tomato-timer',
+  storeName: 'statistics'
 })
 
 export const storage = {
@@ -79,5 +95,29 @@ export const storage = {
       longBreakTime: Number(settings.longBreakTime)
     }
     return await settingsStore.setItem('settings', serializableSettings)
+  },
+
+  // 统计数据相关
+  async getStatistics(): Promise<Statistics | null> {
+    const stats = await statisticsStore.getItem('statistics') as Statistics | null
+    return stats || {
+      dailyStats: [],
+      weeklyStats: []
+    }
+  },
+
+  async saveStatistics(stats: Statistics): Promise<Statistics> {
+    // 创建可序列化的对象副本
+    const serializableStats = {
+      dailyStats: stats.dailyStats.map(stat => ({
+        date: String(stat.date),
+        tomatoCount: Number(stat.tomatoCount)
+      })),
+      weeklyStats: stats.weeklyStats.map(stat => ({
+        week: String(stat.week),
+        tomatoCount: Number(stat.tomatoCount)
+      }))
+    }
+    return await statisticsStore.setItem('statistics', serializableStats)
   }
 }

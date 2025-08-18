@@ -2,6 +2,24 @@ import { defineStore } from 'pinia'
 import { storage } from '../services/storageService'
 import { formatTime } from '../utils/timeUtils'
 
+// 创建事件发射器
+const createEventEmitter = () => {
+  const listeners: Record<string, Function[]> = {}
+  return {
+    on(event: string, callback: Function) {
+      if (!listeners[event]) listeners[event] = []
+      listeners[event].push(callback)
+    },
+    emit(event: string, data?: any) {
+      if (listeners[event]) {
+        listeners[event].forEach(callback => callback(data))
+      }
+    }
+  }
+}
+
+export const timerEvents = createEventEmitter()
+
 interface TimerSettings {
   pomodoroTime: number
   shortBreakTime: number
@@ -95,6 +113,10 @@ export const useTimerStore = defineStore('timer', {
         this.currentTime--
       } else {
         this.pauseTimer()
+        // 如果是番茄模式完成，发射完成事件
+        if (this.mode === 'pomodoro') {
+          timerEvents.emit('pomodoroCompleted')
+        }
         this.resetTimer()
       }
     }

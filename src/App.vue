@@ -3,6 +3,7 @@ import { ref, onUnmounted, onMounted } from "vue";
 import { useTimerStore } from "./stores/timerStore";
 import { useUIStore } from "./stores/uiStore";
 import { useTaskStore } from "./stores/taskStore";
+import { useStatisticsStore } from "./stores/statisticsStore";
 import Header from "./components/Header.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
@@ -18,12 +19,21 @@ import StorageTest from "./components/StorageTest.vue";
 const timerStore = useTimerStore();
 const uiStore = useUIStore();
 const taskStore = useTaskStore();
+const statisticsStore = useStatisticsStore();
 const timerInterval = ref<number | null>(null);
 
 // 组件挂载时加载设置
 onMounted(async () => {
   await timerStore.loadSettings();
   await taskStore.loadTasks();
+  await statisticsStore.loadStatistics();
+  
+  // 监听番茄时钟完成事件
+  import('./stores/timerStore').then(({ timerEvents }) => {
+    timerEvents.on('pomodoroCompleted', async () => {
+      await statisticsStore.completeTomato();
+    });
+  });
 });
 
 // 显示/隐藏设置面板功能已移至 ModeSelector 组件内部
