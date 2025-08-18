@@ -29,7 +29,7 @@ async function saveSettings() {
         <label class="text-sm text-gray-600">番茄时间</label>
         <input 
           v-model.number="localSettings.pomodoroTime"
-          @change="saveSettings"
+          @input="saveSettings"
           type="number" 
           min="1" 
           max="60"
@@ -40,7 +40,7 @@ async function saveSettings() {
         <label class="text-sm text-gray-600">短休息时间</label>
         <input 
           v-model.number="localSettings.shortBreakTime"
-          @change="saveSettings"
+          @input="saveSettings"
           type="number" 
           min="1" 
           max="30"
@@ -51,7 +51,7 @@ async function saveSettings() {
         <label class="text-sm text-gray-600">长休息时间</label>
         <input 
           v-model.number="localSettings.longBreakTime"
-          @change="saveSettings"
+          @input="saveSettings"
           type="number" 
           min="1" 
           max="60"
