@@ -1,91 +1,66 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
-import { Clock, Coffee, Moon } from 'lucide-vue-next'
+import { Clock, Coffee, Moon, Settings } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
 </script>
 
 <template>
-  <div class="mode-selector">
+  <div class="grid grid-cols-4 gap-3 mb-8">
     <button 
       @click="timerStore.setMode('pomodoro')" 
       :class="{ active: timerStore.mode === 'pomodoro' }"
-      class="pomodoro-btn"
+      class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
     >
-      <Clock :size="16" />
-      <span>番茄时间</span>
+      <Clock :size="20" class="mx-auto mb-1" :class="timerStore.mode === 'pomodoro' ? 'text-purple-600' : 'text-gray-600'" />
+      <div class="text-xs font-medium" :class="timerStore.mode === 'pomodoro' ? 'text-green-600' : 'text-gray-500'">
+        25min
+      </div>
     </button>
+    
     <button 
       @click="timerStore.setMode('shortBreak')" 
       :class="{ active: timerStore.mode === 'shortBreak' }"
-      class="short-break-btn"
+      class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
     >
-      <Coffee :size="16" />
-      <span>短休息</span>
+      <div class="font-semibold text-sm">短休</div>
+      <div class="text-xs" :class="timerStore.mode === 'shortBreak' ? 'text-green-600' : 'text-gray-500'">5min</div>
     </button>
+    
     <button 
       @click="timerStore.setMode('longBreak')" 
       :class="{ active: timerStore.mode === 'longBreak' }"
-      class="long-break-btn"
+      class="mode-button bg-white rounded-xl p-4 text-center shadow-md"
     >
-      <Moon :size="16" />
-      <span>长休息</span>
+      <div class="font-semibold text-sm">长休</div>
+      <div class="text-xs" :class="timerStore.mode === 'longBreak' ? 'text-green-600' : 'text-gray-500'">15min</div>
+    </button>
+    
+    <button class="mode-button bg-white rounded-xl p-4 text-center shadow-md">
+      <div class="font-semibold text-sm">设置</div>
+      <Settings :size="12" class="mx-auto text-gray-500" />
     </button>
   </div>
 </template>
 
 <style scoped>
-.mode-selector {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 2rem 0;
+.mode-button {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
-.mode-selector button {
-  padding: 0.5rem 1rem;
-  border: 2px solid #ddd;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
+.mode-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.mode-selector button:hover {
-  border-color: #3498db;
-}
-
-.mode-selector .pomodoro-btn.active {
-  background: #ef4444;
+.mode-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-color: #ef4444;
+  border-color: #667eea;
 }
 
-.mode-selector .short-break-btn.active {
-  background: #8b5cf6;
-  color: white;
-  border-color: #8b5cf6;
-}
-
-.mode-selector .long-break-btn.active {
-  background: #6366f1;
-  color: white;
-  border-color: #6366f1;
-}
-
-.mode-selector .pomodoro-btn:hover {
-  border-color: #ef4444;
-}
-
-.mode-selector .short-break-btn:hover {
-  border-color: #8b5cf6;
-}
-
-.mode-selector .long-break-btn:hover {
-  border-color: #6366f1;
+.mode-button.active * {
+  color: white !important;
 }
 </style>

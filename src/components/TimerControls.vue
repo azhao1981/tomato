@@ -24,65 +24,43 @@ function resetTimer() {
 </script>
 
 <template>
-  <div class="controls">
-    <button @click="startTimer" :disabled="timerStore.isRunning" class="start-btn">
-      <Play :size="20" />
-      <span>开始</span>
+  <div class="flex justify-center space-x-2">
+    <button 
+      @click="startTimer" 
+      :disabled="timerStore.isRunning"
+      class="control-button bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow disabled:opacity-50 disabled:cursor-not-allowed"
+      title="开始"
+    >
+      <Play :size="16" />
     </button>
-    <button @click="pauseTimer" :disabled="!timerStore.isRunning" class="pause-btn">
-      <Pause :size="20" />
-      <span>暂停</span>
+    <button 
+      @click="pauseTimer" 
+      :disabled="!timerStore.isRunning"
+      class="control-button bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-full shadow disabled:opacity-50 disabled:cursor-not-allowed"
+      title="暂停"
+    >
+      <Pause :size="16" />
     </button>
-    <button @click="resetTimer" class="reset-btn">
-      <RotateCcw :size="20" />
-      <span>重置</span>
+    <button 
+      @click="resetTimer" 
+      class="control-button bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full shadow"
+      title="重置"
+    >
+      <RotateCcw :size="16" />
     </button>
   </div>
 </template>
 
 <style scoped>
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.controls button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
+.control-button {
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
 }
 
-.controls button:not(:disabled):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.control-button:hover:not(:disabled) {
+  transform: scale(1.05);
 }
 
-.controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.controls .start-btn {
-  background: #22c55e;
-  color: white;
-}
-
-.controls .pause-btn {
-  background: #f59e0b;
-  color: white;
-}
-
-.controls .reset-btn {
-  background: #ef4444;
-  color: white;
+.control-button:active:not(:disabled) {
+  transform: scale(0.95);
 }
 </style>
