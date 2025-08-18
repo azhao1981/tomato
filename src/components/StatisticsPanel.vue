@@ -14,6 +14,9 @@ const weeklyProgressPercentage = computed(() => {
   return Math.round((completed / total) * 100)
 })
 
+// 在模板中使用这个计算属性
+console.log('本周进度百分比:', weeklyProgressPercentage.value)
+
 // 处理统计项点击
 function handleStatClick(statType: string) {
   console.log(`统计项被点击: ${statType}`)

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onUnmounted, onMounted } from "vue";
 import { useTimerStore } from "./stores/timerStore";
+import { useUIStore } from "./stores/uiStore";
 import Header from "./components/Header.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 import TimerControls from "./components/TimerControls.vue";
@@ -14,8 +15,8 @@ import TimeUtilsTest from "./components/TimeUtilsTest.vue";
 import StorageTest from "./components/StorageTest.vue";
 
 const timerStore = useTimerStore();
+const uiStore = useUIStore();
 const timerInterval = ref<number | null>(null);
-const showSettings = ref(false);
 
 // 组件挂载时加载设置
 onMounted(async () => {
@@ -24,7 +25,7 @@ onMounted(async () => {
 
 // 显示/隐藏设置面板
 function toggleSettings() {
-  showSettings.value = !showSettings.value;
+  uiStore.toggleSettingsPanel();
 }
 
 // Header 组件事件处理
@@ -33,19 +34,19 @@ function handleMenuClick() {
 }
 
 function handleTimerClick() {
-  console.log('番茄时钟按钮被点击');
+  uiStore.toggleTimerCircle();
 }
 
 function handleSettingsClick() {
-  console.log('设置按钮被点击');
+  uiStore.toggleSettingsPanel();
 }
 
 function handleStatsClick() {
-  console.log('统计按钮被点击');
+  uiStore.toggleStatisticsCards();
 }
 
 function handleTasksClick() {
-  console.log('任务列表按钮被点击');
+  uiStore.toggleTaskList();
 }
 
 function startTimer() {
@@ -92,7 +93,7 @@ onUnmounted(() => {
     <!-- 主要内容区域 -->
     <div class="container mx-auto px-4 py-6 max-w-md">
       <!-- Main Timer Circle -->
-      <div class="flex justify-center mb-8">
+      <div v-if="uiStore.showTimerCircle" class="flex justify-center mb-8">
         <TimerDisplay>
           <template #controls>
             <TimerControls @start="startTimer" @pause="pauseTimer" @reset="resetTimer" />
@@ -101,16 +102,16 @@ onUnmounted(() => {
       </div>
 
       <!-- Mode Selection -->
-      <ModeSelector @settings-click="toggleSettings" />
+      <ModeSelector v-if="uiStore.showModeSelector" @settings-click="toggleSettings" />
       
       <!-- Settings Panel -->
-      <SettingsPanel v-if="showSettings" />
+      <SettingsPanel v-if="uiStore.showSettingsPanel" />
       
       <!-- Statistics Panel -->
-      <StatisticsPanel />
+      <StatisticsPanel v-if="uiStore.showStatisticsCards" />
       
       <!-- Task List -->
-      <TaskList />
+      <TaskList v-if="uiStore.showTaskList" />
     </div>
 
     <!-- 隐藏的测试组件（用于开发验证） -->

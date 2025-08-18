@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTimerStore } from '../stores/timerStore'
-import { Clock, Coffee, Settings } from 'lucide-vue-next'
+import { Clock, Settings } from 'lucide-vue-next'
 
 const timerStore = useTimerStore()
 

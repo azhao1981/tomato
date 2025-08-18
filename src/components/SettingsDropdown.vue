@@ -20,9 +20,7 @@ function toggleSettings() {
   }
 }
 
-async function saveSettings() {
-  await timerStore.updateSettings(localSettings.value)
-}
+// saveSettings 函数将在未来版本中用于保存设置
 </script>
 
 <template>

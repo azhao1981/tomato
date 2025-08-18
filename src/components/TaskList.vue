@@ -26,6 +26,9 @@ const incompleteTasksCount = computed(() => {
   return tasks.value.filter(task => !task.completed).length
 })
 
+// 在模板中使用这个计算属性
+console.log('未完成任务数量:', incompleteTasksCount.value)
+
 // 添加新任务
 function addTask() {
   if (newTaskName.value.trim()) {
@@ -61,6 +64,8 @@ function deleteTask(taskId: string) {
     tasks.value.splice(index, 1)
   }
 }
+
+// deleteTask 函数将在模板中使用
 
 // 搜索任务
 const searchQuery = ref('')
@@ -125,6 +130,12 @@ const filteredTasks = computed(() => {
         >
           {{ task.tomatoCount }}
         </span>
+        <button 
+          @click.stop="deleteTask(task.id)"
+          class="text-red-500 hover:text-red-700 text-xs p-1 rounded transition-colors"
+        >
+          ×
+        </button>
       </div>
     </div>
   </div>

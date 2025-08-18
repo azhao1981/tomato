@@ -22,7 +22,8 @@
       "Bash(npx:*)",
       "Bash(pnpm remove tailwindcss)",
       "Bash(pnpm exec tailwindcss:*)",
-      "Bash(pnpm run type-check:*)"
+      "Bash(pnpm run type-check:*)",
+      "Bash(pnpm run lint:*)"
     ],
     "deny": [],
     "ask": []
