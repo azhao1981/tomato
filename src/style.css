@@ -44,3 +44,50 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 }
+
+/* 响应式缩放效果 */
+@media (max-width: 768px) {
+  .container {
+    transform: scale(0.7);
+    transform-origin: top center;
+    width: 142.86%; /* 1 / 0.7 ≈ 1.4286 */
+    margin: 0 auto;
+    padding: 0;
+    position: absolute;
+    left: 50%;
+    top: 80px; /* Header 高度大约 80px */
+    translate: -50% 0;
+  }
+  
+  /* Header 也参与缩放 */
+  header {
+    transform: scale(0.7);
+    transform-origin: top center;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    translate: -50% 0;
+    width: 142.86%; /* 1 / 0.7 ≈ 1.4286 */
+  }
+  
+  /* 调整 body 背景以适应缩放 */
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+}
+
+/* 更小屏幕的额外调整 */
+@media (max-width: 480px) {
+  .container {
+    transform: scale(0.4);
+    width: 250%; /* 1 / 0.4 = 2.5 */
+    top: 60px; /* 更小屏幕 Header 高度适当减少 */
+  }
+  
+  header {
+    transform: scale(0.4);
+    width: 250%; /* 1 / 0.4 = 2.5 */
+  }
+}
