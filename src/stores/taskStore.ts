@@ -19,12 +19,7 @@ interface TaskState {
 
 export const useTaskStore = defineStore('tasks', {
   state: (): TaskState => ({
-    tasks: [
-      { id: '1', name: '完成项目文档', completed: false, tomatoCount: 2, updatedAt: new Date('2024-01-01') },
-      { id: '2', name: '学习新技术', completed: false, tomatoCount: 3, updatedAt: new Date('2024-01-02') },
-      { id: '3', name: '回复邮件', completed: false, tomatoCount: 1, updatedAt: new Date('2024-01-03') },
-      { id: '4', name: '代码审查', completed: true, tomatoCount: 1, updatedAt: new Date('2024-01-04') }
-    ],
+    tasks: [],
     currentTaskId: null,
     searchQuery: '',
     isSearchMode: false
