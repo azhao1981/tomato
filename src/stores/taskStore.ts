@@ -75,6 +75,9 @@ export const useTaskStore = defineStore('tasks', {
         if (currentTaskId && this.tasks.find(task => task.id === currentTaskId)) {
           this.currentTaskId = currentTaskId
         }
+        
+        // 加载搜索/添加模式状态
+        this.isSearchMode = await storage.getSearchMode()
       } catch (error) {
         console.error('加载任务失败:', error)
       }
@@ -149,11 +152,12 @@ export const useTaskStore = defineStore('tasks', {
       this.searchQuery = query
     },
     
-    setSearchMode(isSearch: boolean) {
+    async setSearchMode(isSearch: boolean) {
       this.isSearchMode = isSearch
       if (!isSearch) {
         this.searchQuery = ''
       }
+      await storage.saveSearchMode(isSearch)
     }
   }
 })

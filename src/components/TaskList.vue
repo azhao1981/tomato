@@ -19,9 +19,8 @@ console.log('未完成任务数量:', incompleteTasksCount.value)
 // 处理输入框回车事件
 function handleInputEnter() {
   if (taskStore.isSearchMode) {
-    // 搜索模式：执行搜索并切换到添加模式
+    // 搜索模式：执行搜索过滤操作
     taskStore.setSearchQuery(inputText.value)
-    activateAddMode()
     inputText.value = ''
   } else {
     // 添加模式：添加任务
@@ -33,29 +32,29 @@ function handleInputEnter() {
 }
 
 // 切换到搜索模式
-function activateSearchMode() {
+async function activateSearchMode() {
   if (inputText.value.trim()) {
     // 有输入内容时直接执行搜索，保持搜索模式
     taskStore.setSearchQuery(inputText.value.trim())
-    taskStore.setSearchMode(true)
+    await taskStore.setSearchMode(true)
     inputText.value = ''
   } else {
     // 没有输入内容时显示全部，切换到搜索模式
     taskStore.setSearchQuery('')
-    taskStore.setSearchMode(true)
+    await taskStore.setSearchMode(true)
   }
 }
 
 // 切换到添加模式
-function activateAddMode() {
+async function activateAddMode() {
   if (inputText.value.trim()) {
     // 有输入内容时直接添加任务，切换到添加模式
     taskStore.addTask(inputText.value.trim())
-    taskStore.setSearchMode(false)
+    await taskStore.setSearchMode(false)
     inputText.value = ''
   } else {
     // 没有输入内容时切换到添加模式
-    taskStore.setSearchMode(false)
+    await taskStore.setSearchMode(false)
   }
 }
 

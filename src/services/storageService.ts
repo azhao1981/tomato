@@ -54,6 +54,16 @@ export const storage = {
     return await taskStore.setItem('currentTaskId', taskId)
   },
 
+  // 搜索/添加模式状态相关
+  async getSearchMode(): Promise<boolean> {
+    const searchMode = await taskStore.getItem('searchMode')
+    return searchMode !== false // 默认为 true (搜索模式)
+  },
+
+  async saveSearchMode(isSearchMode: boolean): Promise<boolean> {
+    return await taskStore.setItem('searchMode', isSearchMode)
+  },
+
   // 任务相关
   async getTasks(): Promise<Task[]> {
     const tasks = await taskStore.getItem('tasks')
