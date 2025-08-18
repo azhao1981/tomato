@@ -104,12 +104,18 @@ function deleteTask(taskId: string) {
     
     <!-- 任务列表 -->
     <div class="space-y-2">
+      <div class="text-xs text-gray-500 text-center mb-2">
+        双击任务设为当前任务
+      </div>
       <div 
         v-for="task in taskStore.filteredTasks" 
         :key="task.id"
         class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 task-item transition-colors"
-        :class="{ 'opacity-60': task.completed }"
-        @click="selectTask(task.id)"
+        :class="{ 
+          'opacity-60': task.completed,
+          'bg-purple-100 border-l-4 border-purple-500': taskStore.currentTask?.id === task.id
+        }"
+        @dblclick="selectTask(task.id)"
       >
         <input 
           type="checkbox" 

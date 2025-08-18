@@ -32,6 +32,10 @@ onMounted(async () => {
   import('./stores/timerStore').then(({ timerEvents }) => {
     timerEvents.on('pomodoroCompleted', async () => {
       await statisticsStore.completeTomato();
+      // 给当前任务增加番茄数
+      if (taskStore.currentTask) {
+        taskStore.incrementTomatoCount(taskStore.currentTask.id);
+      }
     });
   });
 });

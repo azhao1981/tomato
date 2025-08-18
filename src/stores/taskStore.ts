@@ -46,8 +46,13 @@ export const useTaskStore = defineStore('tasks', {
           task.name.toLowerCase().includes(state.searchQuery.toLowerCase())
         )
       }
-      // 按最后更新时间降序排列
-      return tasks.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+      // 先按完成状态排序（未完成在前），再按最后更新时间降序排列
+      return tasks.sort((a, b) => {
+        if (a.completed !== b.completed) {
+          return a.completed ? 1 : -1 // 未完成的在前
+        }
+        return b.updatedAt.getTime() - a.updatedAt.getTime() // 同状态下按更新时间排序
+      })
     }
   },
   actions: {
@@ -63,6 +68,12 @@ export const useTaskStore = defineStore('tasks', {
             tomatoCount: Number(task.tomatoCount || 0),
             updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date()
           }))
+        }
+        
+        // 加载当前任务 ID
+        const currentTaskId = await storage.getCurrentTaskId()
+        if (currentTaskId && this.tasks.find(task => task.id === currentTaskId)) {
+          this.currentTaskId = currentTaskId
         }
       } catch (error) {
         console.error('加载任务失败:', error)
@@ -98,20 +109,22 @@ export const useTaskStore = defineStore('tasks', {
       }
     },
     
-    deleteTask(taskId: string) {
+    async deleteTask(taskId: string) {
       const index = this.tasks.findIndex(t => t.id === taskId)
       if (index > -1) {
         this.tasks.splice(index, 1)
         // 如果删除的是当前任务，清除当前任务
         if (this.currentTaskId === taskId) {
           this.currentTaskId = null
+          await storage.saveCurrentTaskId(null)
         }
-        this.saveTasks()
+        await this.saveTasks()
       }
     },
     
-    setCurrentTask(taskId: string) {
+    async setCurrentTask(taskId: string) {
       this.currentTaskId = taskId
+      await storage.saveCurrentTaskId(taskId)
     },
     
     incrementTomatoCount(taskId: string) {
@@ -123,12 +136,13 @@ export const useTaskStore = defineStore('tasks', {
       }
     },
     
-    clearCompleted() {
+    async clearCompleted() {
       this.tasks = this.tasks.filter(task => !task.completed)
       if (this.currentTaskId && !this.tasks.find(t => t.id === this.currentTaskId)) {
         this.currentTaskId = null
+        await storage.saveCurrentTaskId(null)
       }
-      this.saveTasks()
+      await this.saveTasks()
     },
     
     setSearchQuery(query: string) {

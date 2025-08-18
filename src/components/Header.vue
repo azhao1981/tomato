@@ -4,9 +4,7 @@ import { useTaskStore } from '../stores/taskStore'
 import { Menu, Clock, Settings, BarChart3, ListChecks } from 'lucide-vue-next'
 
 // 定义 props
-defineProps<{
-  currentTask?: string
-}>()
+defineProps<{}>()
 
 // 定义事件
 const emit = defineEmits<{
@@ -22,7 +20,7 @@ const taskStore = useTaskStore()
 
 // 当前任务标题
 const taskTitle = computed(() => {
-  return taskStore.currentTask?.name || '完成项目文档'
+  return taskStore.currentTask?.name || '选择任务'
 })
 </script>
 
@@ -43,7 +41,7 @@ const taskTitle = computed(() => {
         <!-- 当前任务标题 -->
         <div class="flex-1">
           <h1 class="text-lg font-medium text-gray-800 truncate">
-            {{ currentTask || taskTitle }}
+            {{ taskTitle }}
           </h1>
         </div>
       </div>

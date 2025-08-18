@@ -44,6 +44,16 @@ const statisticsStore = localforage.createInstance({
 })
 
 export const storage = {
+  // 当前任务 ID 相关
+  async getCurrentTaskId(): Promise<string | null> {
+    const currentTaskId = await taskStore.getItem('currentTaskId')
+    return currentTaskId || null
+  },
+
+  async saveCurrentTaskId(taskId: string | null): Promise<string | null> {
+    return await taskStore.setItem('currentTaskId', taskId)
+  },
+
   // 任务相关
   async getTasks(): Promise<Task[]> {
     const tasks = await taskStore.getItem('tasks')
