@@ -17,16 +17,10 @@ const currentTimeInfo = computed(() => {
   const year = now.getFullYear()
   const month = String(now.getMonth() + 1).padStart(2, '0')
   const day = String(now.getDate()).padStart(2, '0')
-  const today = `${year}-${month}-${day}`
-  
-  // 使用修复后的 todayStats 计算属性
-  const todayStats = statisticsStore.todayStats
   
   return {
     currentTime: now.toLocaleTimeString('zh-CN'),
-    currentDate: `${year}年${month}月${day}日`,
-    todayTomatoCount: todayStats.tomatoCount,
-    isoDate: today
+    currentDate: `${year}年${month}月${day}日`
   }
 })
 
@@ -69,24 +63,9 @@ async function saveSettings() {
     
     <!-- 当前时间信息 -->
     <div class="bg-purple-50 rounded-lg p-3 mb-4 border border-purple-100">
-      <div class="text-xs text-purple-600 font-medium mb-2">当前时间信息</div>
-      <div class="space-y-1">
-        <div class="flex justify-between text-xs">
-          <span class="text-gray-600">当前时间:</span>
-          <span class="font-mono text-purple-700">{{ currentTimeInfo.currentTime }}</span>
-        </div>
-        <div class="flex justify-between text-xs">
-          <span class="text-gray-600">今日日期:</span>
-          <span class="text-purple-700">{{ currentTimeInfo.currentDate }}</span>
-        </div>
-        <div class="flex justify-between text-xs">
-          <span class="text-gray-600">ISO 日期:</span>
-          <span class="font-mono text-purple-700 text-xs">{{ currentTimeInfo.isoDate }}</span>
-        </div>
-        <div class="flex justify-between text-xs">
-          <span class="text-gray-600">今日番茄:</span>
-          <span class="text-purple-700 font-semibold">{{ currentTimeInfo.todayTomatoCount }} 个</span>
-        </div>
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-gray-600">当前时间:</span>
+        <span class="font-mono text-purple-700">{{ currentTimeInfo.currentTime }} {{ currentTimeInfo.currentDate }}</span>
       </div>
     </div>
     
