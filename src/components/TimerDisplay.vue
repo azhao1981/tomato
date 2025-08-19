@@ -60,8 +60,10 @@ const minuteRingStyle = computed(() => {
 
 .minute-ring {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  top: 10px;
+  left: 10px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
   opacity: 0.8;
 }
@@ -78,10 +80,10 @@ const minuteRingStyle = computed(() => {
 
 .hour-ring {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 300px;
-  height: 300px;
+  top: 5px;
+  left: 5px;
+  width: 310px;
+  height: 310px;
   border-radius: 50%;
   opacity: 0.8;
   mask: radial-gradient(circle at center, transparent 70%, black 70%);
