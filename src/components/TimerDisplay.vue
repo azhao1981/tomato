@@ -8,27 +8,27 @@ const timerStore = useTimerStore()
 const progressStyle = computed(() => {
   const angle = (timerStore.progressPercentage / 100) * 360
   return {
-    background: `conic-gradient(from 0deg, #10b981 0deg ${angle}deg, #e5e7eb ${angle}deg)`
+    background: `conic-gradient(from 0deg, #10b981 0deg ${angle}deg, #f1f5f9 ${angle}deg)`
   }
 })
 
 // 计算小时圈的样式
 const hourRingStyle = computed(() => {
-  const currentHour = 6 // 写死为6点进行测试
-  const hourAngle = (currentHour / 12) * 360
+  const currentHour = new Date().getHours()
+  const hourAngle = (currentHour / 24) * 360 // 24小时制
   return {
     '--hour-angle': `${hourAngle}deg`,
-    background: `conic-gradient(from 0deg, #fbbf24 0deg ${hourAngle}deg, #e5e7eb ${hourAngle}deg 360deg)`
+    background: `conic-gradient(from 0deg, #f59e0b 0deg ${hourAngle}deg, #f1f5f9 ${hourAngle}deg 360deg)`
   }
 })
 
 // 计算分钟圈的样式
 const minuteRingStyle = computed(() => {
-  const currentMinute = 30 // 写死为30分钟进行测试
+  const currentMinute = new Date().getMinutes()
   const minuteAngle = (currentMinute / 60) * 360
   return {
     '--minute-angle': `${minuteAngle}deg`,
-    background: `conic-gradient(from 0deg, #1f2937 0deg ${minuteAngle}deg, #e5e7eb ${minuteAngle}deg 360deg)`
+    background: `conic-gradient(from 0deg, #64748b 0deg ${minuteAngle}deg, #f1f5f9 ${minuteAngle}deg 360deg)`
   }
 })
 </script>
@@ -65,7 +65,7 @@ const minuteRingStyle = computed(() => {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 .minute-ring::before {
@@ -74,7 +74,7 @@ const minuteRingStyle = computed(() => {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid #1f2937;
+  border: 2px solid #64748b;
   clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 50% 50%);
 }
 
@@ -85,7 +85,7 @@ const minuteRingStyle = computed(() => {
   width: 310px;
   height: 310px;
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 0.6;
   mask: radial-gradient(circle at center, transparent 70%, black 70%);
   -webkit-mask: radial-gradient(circle at center, transparent 70%, black 70%);
 }
