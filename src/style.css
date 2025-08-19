@@ -91,3 +91,18 @@
     width: 250%; /* 1 / 0.4 = 2.5 */
   }
 }
+
+/* 小时圈响应式调整 */
+@media (max-width: 768px) {
+  .timer-container {
+    transform: scale(0.7);
+    transform-origin: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .timer-container {
+    transform: scale(0.4);
+    transform-origin: center;
+  }
+}
