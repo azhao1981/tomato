@@ -24,6 +24,8 @@ interface TimerSettings {
   pomodoroTime: number
   shortBreakTime: number
   longBreakTime: number
+  showHourRing: boolean
+  showMinuteRing: boolean
 }
 
 interface TimerState {
@@ -41,7 +43,9 @@ export const useTimerStore = defineStore('timer', {
     settings: {
       pomodoroTime: 25,
       shortBreakTime: 5,
-      longBreakTime: 15
+      longBreakTime: 15,
+      showHourRing: true,
+      showMinuteRing: true
     }
   }),
   getters: {
@@ -67,7 +71,9 @@ export const useTimerStore = defineStore('timer', {
         this.settings = {
           pomodoroTime: Number(settings.pomodoroTime) || 25,
           shortBreakTime: Number(settings.shortBreakTime) || 5,
-          longBreakTime: Number(settings.longBreakTime) || 15
+          longBreakTime: Number(settings.longBreakTime) || 15,
+          showHourRing: settings.showHourRing !== undefined ? Boolean(settings.showHourRing) : true,
+          showMinuteRing: settings.showMinuteRing !== undefined ? Boolean(settings.showMinuteRing) : true
         }
         this.resetTimer()
       } catch (error) {
@@ -76,7 +82,9 @@ export const useTimerStore = defineStore('timer', {
         this.settings = {
           pomodoroTime: 25,
           shortBreakTime: 5,
-          longBreakTime: 15
+          longBreakTime: 15,
+          showHourRing: true,
+          showMinuteRing: true
         }
       }
     },

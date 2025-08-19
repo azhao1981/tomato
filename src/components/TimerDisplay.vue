@@ -35,8 +35,8 @@ const minuteRingStyle = computed(() => {
 
 <template>
   <div class="timer-container">
-    <div class="minute-ring" :style="minuteRingStyle"></div>
-    <div class="hour-ring" :style="hourRingStyle"></div>
+    <div v-if="timerStore.settings.showMinuteRing" class="minute-ring" :style="minuteRingStyle"></div>
+    <div v-if="timerStore.settings.showHourRing" class="hour-ring" :style="hourRingStyle"></div>
     <div class="timer-circle">
       <div class="progress-ring" :style="progressStyle"></div>
       <div class="timer-display">

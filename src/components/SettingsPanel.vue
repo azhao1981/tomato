@@ -48,7 +48,9 @@ onUnmounted(() => {
 const localSettings = ref({
   pomodoroTime: timerStore.settings.pomodoroTime,
   shortBreakTime: timerStore.settings.shortBreakTime,
-  longBreakTime: timerStore.settings.longBreakTime
+  longBreakTime: timerStore.settings.longBreakTime,
+  showHourRing: timerStore.settings.showHourRing,
+  showMinuteRing: timerStore.settings.showMinuteRing
 })
 
 // 监听 store 设置变化，同步到本地状态
@@ -121,6 +123,32 @@ async function saveSettings() {
           max="60"
           class="w-16 px-2 py-1 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
+      </div>
+      
+      <!-- 分隔线 -->
+      <div class="border-t border-gray-200 my-3"></div>
+      
+      <!-- 显示设置 -->
+      <div class="space-y-3">
+        <div class="text-xs font-medium text-gray-700 mb-2">显示设置</div>
+        <div class="flex items-center justify-between">
+          <label class="text-sm text-gray-600">显示小时圈</label>
+          <input 
+            v-model="localSettings.showHourRing"
+            @change="saveSettings"
+            type="checkbox"
+            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500"
+          >
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-sm text-gray-600">显示分钟圈</label>
+          <input 
+            v-model="localSettings.showMinuteRing"
+            @change="saveSettings"
+            type="checkbox"
+            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500"
+          >
+        </div>
       </div>
     </div>
   </div>
