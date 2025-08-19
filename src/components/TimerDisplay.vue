@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useTimerStore } from '../stores/timerStore'
 
 const timerStore = useTimerStore()
+
+// 时间更新触发器，用于强制重新计算时间
+const timeUpdateTrigger = ref(0)
+
+// 每秒更新时间显示
+let timeInterval: number
+onMounted(() => {
+  timeInterval = setInterval(() => {
+    timeUpdateTrigger.value++
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (timeInterval) {
+    clearInterval(timeInterval)
+  }
+})
 
 // 计算进度环的样式
 const progressStyle = computed(() => {
@@ -14,6 +31,8 @@ const progressStyle = computed(() => {
 
 // 计算小时圈的样式
 const hourRingStyle = computed(() => {
+  // 添加时间触发器依赖，确保每秒重新计算
+  void timeUpdateTrigger.value
   const currentHour = new Date().getHours()
   const hourAngle = (currentHour / 24) * 360 // 24小时制
   return {
@@ -24,6 +43,8 @@ const hourRingStyle = computed(() => {
 
 // 计算分钟圈的样式
 const minuteRingStyle = computed(() => {
+  // 添加时间触发器依赖，确保每秒重新计算
+  void timeUpdateTrigger.value
   const currentMinute = new Date().getMinutes()
   const minuteAngle = (currentMinute / 60) * 360
   return {

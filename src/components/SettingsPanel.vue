@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { useTimerStore } from '../stores/timerStore'
-import { useStatisticsStore } from '../stores/statisticsStore'
 
 const timerStore = useTimerStore()
-const statisticsStore = useStatisticsStore()
 
 // 时间更新触发器，用于强制重新计算时间
 const timeUpdateTrigger = ref(0)
@@ -65,7 +63,7 @@ async function saveSettings() {
     <div class="bg-purple-50 rounded-lg p-3 mb-4 border border-purple-100">
       <div class="flex justify-between items-center text-sm">
         <span class="text-gray-600">当前时间:</span>
-        <span class="font-mono text-purple-700">{{ currentTimeInfo.currentTime }} {{ currentTimeInfo.currentDate }}</span>
+        <span class="font-mono text-purple-700">{{ currentTimeInfo.currentDate }} {{ currentTimeInfo.currentTime }}</span>
       </div>
     </div>
     
