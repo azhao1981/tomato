@@ -25,7 +25,7 @@ const taskTitle = computed(() => {
 </script>
 
 <template>
-  <header class="">
+  <header class="w-full">
     <div class="flex items-center justify-between">
       <!-- 左侧：菜单按钮和任务标题 -->
       <div class="flex items-center space-x-3">
@@ -47,7 +47,7 @@ const taskTitle = computed(() => {
       </div>
       
       <!-- 右侧：功能导航图标 -->
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-2 flex-shrink-0">
         <!-- 番茄时钟按钮 -->
         <button 
           @click="emit('timerClick')"
