@@ -25,8 +25,8 @@ const taskTitle = computed(() => {
 </script>
 
 <template>
-  <header class="px-4 py-6">
-    <div class="flex items-center justify-between max-w-md mx-auto">
+  <header class="container mx-auto px-4 py-6 max-w-md">
+    <div class="flex items-center justify-between">
       <!-- 左侧：菜单按钮和任务标题 -->
       <div class="flex items-center space-x-3">
         <!-- 菜单按钮 -->
