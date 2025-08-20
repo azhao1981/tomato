@@ -8,7 +8,6 @@ import Header from "../components/Header.vue";
 import TimerDisplay from "../components/TimerDisplay.vue";
 import TimerControls from "../components/TimerControls.vue";
 import ModeSelector from "../components/ModeSelector.vue";
-import TimerSettings from "../components/TimerSettings.vue";
 import SettingsPanel from "../components/SettingsPanel.vue";
 import StatisticsPanel from "../components/StatisticsPanel.vue";
 import TaskList from "../components/TaskList.vue";
